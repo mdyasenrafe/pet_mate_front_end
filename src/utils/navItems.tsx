@@ -1,42 +1,42 @@
-import { IconType } from "react-icons";
+import { NavItem } from "@/types";
 import { FaHome, FaBell, FaUser, FaPen, FaStar } from "react-icons/fa";
-
-export interface NavItem {
-  id: number;
-  label: string;
-  path: string;
-  icon: IconType;
-}
+import { LuHome, LuPlusCircle } from "react-icons/lu";
+import { CiSearch } from "react-icons/ci";
 
 export const navItems: NavItem[] = [
   {
     id: 1,
     label: "Home",
     path: "/",
-    icon: FaHome,
+    icon: LuHome,
+    desktop: true,
   },
   {
     id: 2,
-    label: "Create Post",
-    path: "/create-post",
-    icon: FaPen,
+    label: "Feed",
+    path: "/feed",
+    icon: CiSearch,
+    desktop: true,
   },
   {
     id: 3,
-    label: "Notifications",
-    path: "/notifications",
-    icon: FaBell,
+    label: "Post",
+    path: "/create-post",
+    icon: LuPlusCircle,
+    desktop: false,
   },
   {
     id: 4,
-    label: "Profile",
-    path: "/profile",
-    icon: FaUser,
-  },
-  {
-    id: 5,
     label: "Premium",
     path: "/premium",
     icon: FaStar,
+    desktop: true,
+  },
+  {
+    id: 5,
+    label: "Profile",
+    path: "/profile",
+    icon: FaUser,
+    desktop: true,
   },
 ];

@@ -1,4 +1,6 @@
 export enum colors {
+  primary = "#9747ff",
+  secondary = "#2BCDC1",
   warning = "#FF8A00",
   danger = "#EA4B48",
   white = "#FFFFFF",
