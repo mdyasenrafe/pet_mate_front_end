@@ -1,13 +1,17 @@
 import { Button, Text } from "@/components/atoms";
 import { navItems } from "@/utils";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { LuPlusCircle } from "react-icons/lu";
 
 export const LeftSideBar = () => {
   return (
-    <aside className="p-4 h-full w-full bg-primary text-center">
+    <aside className="p-4 h-full w-full bg-primary text-center pt-8">
       <nav>
+        <Link href={"/"} className="justify-center flex mb-4">
+          <Image src="/logo.png" width={80} height={80} alt="" />
+        </Link>
         <div className="space-y-3">
           {navItems.map(
             ({ id, label, path, icon: Icon, desktop }) =>
