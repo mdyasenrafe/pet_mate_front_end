@@ -13,8 +13,11 @@ export const RightSideBar = () => {
   };
 
   return (
-    <div className="ml-3 bg-secondary p-3 mt-4 rounded-md">
-      <Text className="text-white font-bold mb-2" variant="p3">
+    <div className="ml-3 bg-secondary p-3 mt-4 rounded-md !sticky top-4">
+      <Text
+        className="text-white font-bold mb-2 text-lg lg:text-sm 2xl:text-lg"
+        variant="p3"
+      >
         Join the Pet Care Community
       </Text>
       <Text variant="p5" color="white">

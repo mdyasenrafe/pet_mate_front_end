@@ -7,7 +7,7 @@ import { LuPlusCircle } from "react-icons/lu";
 
 export const LeftSideBar = () => {
   return (
-    <aside className="p-4 h-full w-full bg-primary text-center pt-8">
+    <aside className="h-screen w-full bg-primary text-center pt-8 !sticky overflow-y-hidden top-0 p-4">
       <nav>
         <Link href={"/"} className="justify-center flex mb-4">
           <Image src="/logo.png" width={80} height={80} alt="" />

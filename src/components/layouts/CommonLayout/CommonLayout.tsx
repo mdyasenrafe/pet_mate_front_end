@@ -9,7 +9,7 @@ export const CommonLayout: React.FC<TProps> = ({ children }) => {
   return (
     <Container>
       <Row>
-        <Col xs={0} lg={4} className="min-h-screen sticky top-0">
+        <Col xs={0} lg={4}>
           <LeftSideBar />
         </Col>
         <Col xs={24} lg={16} className="border-r">
