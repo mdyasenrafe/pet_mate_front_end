@@ -8,7 +8,7 @@ export const LeftSideBar = () => {
   return (
     <aside className="p-4 h-full w-full bg-primary text-center">
       <nav>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {navItems.map(
             ({ id, label, path, icon: Icon, desktop }) =>
               desktop && (
@@ -17,14 +17,16 @@ export const LeftSideBar = () => {
                   className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105 hover:bg-white/10"
                 >
                   <Link href={path} className="flex items-center">
-                    <Icon className="text-xl" color="white" />
-                    <Text className="ml-2 text-white">{label}</Text>
+                    <Icon className="text-2xl" color="white" />
+                    <Text variant="p3" className="ml-2 text-white">
+                      {label}
+                    </Text>
                   </Link>
                 </div>
               )
           )}
         </div>
-        <div className="mt-4">
+        <div className="mt-6">
           <Button
             icon={<LuPlusCircle />}
             className="w-3/4 !h-[40px] transition-transform transform hover:scale-105 hover:bg-white/10"

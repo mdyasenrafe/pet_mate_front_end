@@ -1,8 +1,9 @@
 import { Container } from "@/components/atoms";
-import { Row, Col } from "antd"; // Import Ant Design's grid system
+import { Row, Col } from "antd";
 import { TProps } from "@/types";
 import React from "react";
 import { LeftSideBar } from "../LeftSideBar";
+import { BottomNavBar } from "../BottomNavbar";
 
 export const CommonLayout: React.FC<TProps> = ({ children }) => {
   return (
@@ -23,9 +24,7 @@ export const CommonLayout: React.FC<TProps> = ({ children }) => {
         </Col>
 
         <Col xs={24} lg={0}>
-          <nav className="flex">
-            <h1>Mobile Navigation</h1>
-          </nav>
+          <BottomNavBar />
         </Col>
       </Row>
     </Container>
