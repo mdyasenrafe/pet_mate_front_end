@@ -2,8 +2,8 @@ import { Container } from "@/components/atoms";
 import { Row, Col } from "antd";
 import { TProps } from "@/types";
 import React from "react";
-import { LeftSideBar } from "../LeftSideBar";
 import { BottomNavBar } from "../BottomNavbar";
+import { LeftSideBar, RightSideBar } from "./componens";
 
 export const CommonLayout: React.FC<TProps> = ({ children }) => {
   return (
@@ -12,15 +12,12 @@ export const CommonLayout: React.FC<TProps> = ({ children }) => {
         <Col xs={0} lg={4} className="h-screen">
           <LeftSideBar />
         </Col>
-
-        <Col xs={24} lg={16}>
-          {children}
+        <Col xs={24} lg={16} className="border-r">
+          <main>{children}</main>
         </Col>
 
         <Col xs={0} lg={4}>
-          <div>
-            <h1>Hello, I am right side drawer</h1>
-          </div>
+          <RightSideBar />
         </Col>
 
         <Col xs={24} lg={0}>
