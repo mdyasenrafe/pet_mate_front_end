@@ -23,7 +23,7 @@ const SignIn = () => {
       const res = await login(data).unwrap();
       dispatch(addUser({ user: res.data, token: res.token as string }));
       toast.success(res?.message);
-      router.push("/home");
+      router.push("/");
     } catch (err: any) {
       console.log("Caught error:", err);
       toast.error("Failed to login. Please try again.");

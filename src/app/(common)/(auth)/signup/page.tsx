@@ -43,7 +43,7 @@ const Signup = () => {
         const res = await signup(data).unwrap();
         dispatch(addUser({ user: res.data, token: res.token as string }));
         toast.success(res?.message);
-        router.push("/home");
+        router.push("/");
       }
     } catch (err: any) {
       console.log("Caught error during signup:", err);
