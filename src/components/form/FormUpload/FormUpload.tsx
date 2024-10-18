@@ -23,7 +23,7 @@ export const FormUpload: React.FC<TFormUploadProps> = React.forwardRef(
     useEffect(() => {
       if (defaultValue?.length !== 0 && defaultValue !== "") {
         if (
-          name === "thumb" &&
+          name === "profilePicture" &&
           defaultValue !== "" &&
           defaultValue?.length !== 0 &&
           defaultValue
@@ -67,13 +67,13 @@ export const FormUpload: React.FC<TFormUploadProps> = React.forwardRef(
         reader.readAsDataURL(file);
         reader.onload = () => {
           const result = reader.result as string;
-          const base64Data = result.split(",")[1]; // Split the result and get the Base64 data
-          resolve(base64Data); // Return only the Base64 data, excluding the prefix
+          const base64Data = result.split(",")[1];
+          resolve(result);
         };
         reader.onerror = (error) => reject(error);
       });
 
-    const isThumb = name === "thumb"; // Determine if this instance is for 'thumb'
+    const isProfilePicture = name === "profilePicture";
 
     const handlePreview = async (file: any) => {
       if (!file.url && !file.preview) {
@@ -105,7 +105,7 @@ export const FormUpload: React.FC<TFormUploadProps> = React.forwardRef(
                 beforeUpload={() => false}
                 onChange={handleFileChange}
                 multiple={multiple}
-                listType={isThumb ? "picture" : "picture-card"}
+                listType={isProfilePicture ? "picture" : "picture-card"}
                 maxCount={multiple ? undefined : 1}
                 accept=".jpeg,.jpg,.png"
                 onPreview={handlePreview}
@@ -113,7 +113,7 @@ export const FormUpload: React.FC<TFormUploadProps> = React.forwardRef(
                   defaultValue as string | string[]
                 )}
               >
-                {!isThumb ? (
+                {!isProfilePicture ? (
                   <button
                     className="flex justify-center items-center"
                     type="button"

@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
+import { FormUpload } from "@/components/form";
 
 const Signup = () => {
   const [signup, { isLoading }] = useSignupMutation();
@@ -24,10 +25,11 @@ const Signup = () => {
   const onSubmit: SubmitHandler<TSignupValue> = async (data) => {
     try {
       console.log("Submitting signup form...");
-      const res = await signup(data).unwrap();
-      dispatch(addUser({ user: res.data, token: res.token as string }));
-      toast.success(res?.message);
-      router.push("/home");
+      console.log(data);
+      // const res = await signup(data).unwrap();
+      // dispatch(addUser({ user: res.data, token: res.token as string }));
+      // toast.success(res?.message);
+      // router.push("/home");
     } catch (err: any) {
       console.log("Caught error during signup:", err);
       toast.error("Failed to sign up. Please try again.");
@@ -72,6 +74,7 @@ const Signup = () => {
             type="password"
             placeholder="Enter your password"
           />
+          <FormUpload name="profilePicture" label="Upload profile picture" />
 
           <Button
             htmlType="submit"
