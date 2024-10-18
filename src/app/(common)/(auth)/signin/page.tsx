@@ -94,10 +94,9 @@ const SignIn = () => {
           </Button>
         </FormWrapper>
 
-        {/* Sign Up Link */}
         <Text className="text-center text-sm text-gray-600 mt-6" variant="p5">
           Don’t have an account?{" "}
-          <a href="/register" className="text-primary hover:underline">
+          <a href="/signup" className="text-primary hover:underline">
             Sign up
           </a>
         </Text>
