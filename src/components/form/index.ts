@@ -4,3 +4,4 @@ export * from "./FormTextArea";
 export * from "./FormSelect";
 export * from "./FormDatePicker";
 export * from "./FormTimePicker";
+export * from "./FormUpload";
