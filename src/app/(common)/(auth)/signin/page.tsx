@@ -5,9 +5,11 @@ import { FaPaw } from "react-icons/fa";
 import { Text } from "@/components/atoms";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
+import Link from "next/link";
+import { SubmitHandler } from "react-hook-form";
 
 const SignIn = () => {
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<any> = async (data) => {
     console.log("Form data: ", data);
   };
 
@@ -46,9 +48,12 @@ const SignIn = () => {
           />
 
           <div className="flex justify-end items-center mt-2">
-            <a href="#" className="text-sm text-primary hover:underline">
+            <Link
+              href={""}
+              className="text-sm text-primary hover:underline hover:!text-[#9747ff]"
+            >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
