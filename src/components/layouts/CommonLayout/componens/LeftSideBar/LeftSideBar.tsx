@@ -1,11 +1,15 @@
+"use client";
+
 import { Button, Text } from "@/components/atoms";
 import { navItems } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { LuPlusCircle } from "react-icons/lu";
 
 export const LeftSideBar = () => {
+  const router = useRouter();
   return (
     <aside className="h-screen w-full bg-primary text-center pt-8 !sticky overflow-y-hidden top-0 p-4">
       <nav>
@@ -35,6 +39,7 @@ export const LeftSideBar = () => {
             icon={<LuPlusCircle />}
             className="w-3/4 !h-[40px] transition-transform transform hover:scale-105 hover:bg-white/10"
             customColor="white"
+            onClick={() => router.push("/create-post")}
           >
             Post
           </Button>
