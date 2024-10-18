@@ -73,14 +73,6 @@ const SignIn = () => {
             </Link>
           </div>
 
-          {/* <button
-            type="submit"
-            className="w-full bg-primary text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-300 mt-4"
-          >
-            <Text className="text-white" variant="p3">
-              Sign In
-            </Text>
-          </button> */}
           <Button
             htmlType="submit"
             customColor="primary"
