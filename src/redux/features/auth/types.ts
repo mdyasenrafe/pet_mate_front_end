@@ -9,6 +9,7 @@ export type TUser = {
   createdAt: string;
   updatedAt: string;
   status: "active" | "deleted";
+  profilePicture: string;
   __v: number;
 };
 
