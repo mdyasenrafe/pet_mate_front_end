@@ -31,7 +31,7 @@ const Signup = () => {
       console.log("Submitting signup form...");
       if (data.profilePicture) {
         const thumbRes = await imageUpload({
-          url: data.profilePicture,
+          file: data.profilePicture,
         }).unwrap();
 
         if (thumbRes?.data?.url) {
