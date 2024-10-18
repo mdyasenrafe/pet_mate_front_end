@@ -16,8 +16,12 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 import { FormUpload } from "@/components/form";
+import { useImageUploadMutation } from "@/api/updloadApi";
+import { signupSchema } from "@/Schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Signup = () => {
+  const [imageUpload, { isLoading: imageLoading }] = useImageUploadMutation();
   const [signup, { isLoading }] = useSignupMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -25,11 +29,22 @@ const Signup = () => {
   const onSubmit: SubmitHandler<TSignupValue> = async (data) => {
     try {
       console.log("Submitting signup form...");
-      console.log(data);
-      // const res = await signup(data).unwrap();
-      // dispatch(addUser({ user: res.data, token: res.token as string }));
-      // toast.success(res?.message);
-      // router.push("/home");
+      if (data.profilePicture) {
+        const thumbRes = await imageUpload({
+          url: data.profilePicture,
+        }).unwrap();
+
+        if (thumbRes?.data?.url) {
+          data.profilePicture = thumbRes.data.url;
+        } else {
+          toast.error("Something went wrong! Please try again");
+        }
+
+        const res = await signup(data).unwrap();
+        dispatch(addUser({ user: res.data, token: res.token as string }));
+        toast.success(res?.message);
+        router.push("/home");
+      }
     } catch (err: any) {
       console.log("Caught error during signup:", err);
       toast.error("Failed to sign up. Please try again.");
@@ -57,7 +72,7 @@ const Signup = () => {
           heartwarming stories.
         </Text>
 
-        <FormWrapper onSubmit={onSubmit}>
+        <FormWrapper onSubmit={onSubmit} resolver={zodResolver(signupSchema)}>
           <FormInput
             name="name"
             label="Full Name"
@@ -80,8 +95,8 @@ const Signup = () => {
             htmlType="submit"
             customColor="primary"
             className="w-full !h-[44px] hover:bg-primary-dark transition duration-300 mt-4"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || imageLoading}
+            disabled={isLoading || imageLoading}
           >
             <Text className="text-white" variant="p3">
               Sign Up

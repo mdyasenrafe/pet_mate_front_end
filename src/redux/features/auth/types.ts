@@ -29,4 +29,5 @@ export type TSignupValue = {
   phone: string;
   address: string;
   role: "user" | "admin";
+  profilePicture: string;
 };
