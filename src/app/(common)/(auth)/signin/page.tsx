@@ -2,15 +2,32 @@
 
 import React from "react";
 import { FaPaw } from "react-icons/fa";
-import { Text } from "@/components/atoms";
+import { Button, Text } from "@/components/atoms";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 import Link from "next/link";
 import { SubmitHandler } from "react-hook-form";
+import { TSigninValue, addUser, useLoginMutation } from "@/redux/features/auth";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux";
+import { toast } from "sonner";
 
 const SignIn = () => {
-  const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log("Form data: ", data);
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<TSigninValue> = async (data) => {
+    try {
+      console.log("Submitting form...");
+      const res = await login(data).unwrap();
+      dispatch(addUser({ user: res.data, token: res.token as string }));
+      toast.success(res?.message);
+      router.push("/home");
+    } catch (err: any) {
+      console.log("Caught error:", err);
+      toast.error("Failed to login. Please try again.");
+    }
   };
 
   return (
@@ -56,14 +73,25 @@ const SignIn = () => {
             </Link>
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-primary text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-300 mt-4"
           >
             <Text className="text-white" variant="p3">
               Sign In
             </Text>
-          </button>
+          </button> */}
+          <Button
+            htmlType="submit"
+            customColor="primary"
+            className="w-full !h-[44px] hover:bg-primary-dark transition duration-300 mt-4"
+            loading={isLoading}
+            disabled={isLoading}
+          >
+            <Text className="text-white " variant="p3">
+              Sign In
+            </Text>
+          </Button>
         </FormWrapper>
 
         {/* Sign Up Link */}

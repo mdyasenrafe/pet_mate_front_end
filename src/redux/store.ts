@@ -13,6 +13,8 @@ import {
 } from "redux-persist";
 import themeSlice from "./features/theme/themeSlice";
 import storage from "redux-persist/lib/storage";
+import authSlice from "./features/auth/authSlice";
+import { baseApi } from "@/api/baseApi";
 
 // Persist config for theme slice
 const themePersistConfig = {
@@ -20,18 +22,24 @@ const themePersistConfig = {
   storage,
 };
 
+const authPersistConfig = {
+  key: "auth",
+  storage,
+};
+
+const persistedAuthReducer = persistReducer(authPersistConfig, authSlice);
 const persistedThemeReducer = persistReducer(themePersistConfig, themeSlice);
 
 export const store = configureStore({
   reducer: {
+    auth: persistedAuthReducer,
     themeMode: persistedThemeReducer,
+    [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+    getDefaultMiddleware({ serializableCheck: false }).concat(
+      baseApi.middleware
+    ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
