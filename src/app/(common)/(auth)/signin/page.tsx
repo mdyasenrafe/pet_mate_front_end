@@ -25,8 +25,7 @@ const SignIn = () => {
       toast.success(res?.message);
       router.push("/");
     } catch (err: any) {
-      console.log("Caught error:", err);
-      toast.error("Failed to login. Please try again.");
+      toast.error(err?.data?.message || "Failed to login. Please try again.");
     }
   };
 

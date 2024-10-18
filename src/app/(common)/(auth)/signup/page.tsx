@@ -46,8 +46,7 @@ const Signup = () => {
         router.push("/");
       }
     } catch (err: any) {
-      console.log("Caught error during signup:", err);
-      toast.error("Failed to sign up. Please try again.");
+      toast.error(err?.data?.message || "Failed to sign up. Please try again.");
     }
   };
 
