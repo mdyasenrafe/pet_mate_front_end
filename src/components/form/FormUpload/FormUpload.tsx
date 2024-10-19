@@ -107,7 +107,7 @@ export const FormUpload: React.FC<TFormUploadProps> = React.forwardRef(
                 multiple={multiple}
                 listType={isProfilePicture ? "picture" : "picture-card"}
                 maxCount={multiple ? undefined : 1}
-                accept=".jpeg,.jpg,.png"
+                accept={isProfilePicture ? ".jpeg,.jpg,.png" : "*"}
                 onPreview={handlePreview}
                 defaultFileList={generateDefaultFileList(
                   defaultValue as string | string[]
