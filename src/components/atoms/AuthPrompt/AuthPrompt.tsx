@@ -4,12 +4,14 @@ import { FaLock } from "react-icons/fa";
 import { Text, Button } from "@/components/atoms";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export const AuthPrompt = () => {
   const router = useRouter();
+  const pathName = usePathname();
 
   const handleLoginRedirect = () => {
-    router.push(`/signin?redirect=`);
+    router.push(`/signin?redirect=${pathName}`);
   };
 
   return (

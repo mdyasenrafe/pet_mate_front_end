@@ -12,7 +12,7 @@ import {
   addUser,
   useSignupMutation,
 } from "@/redux/features/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 import { FormUpload } from "@/components/form";
@@ -21,6 +21,8 @@ import { signupSchema } from "@/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Signup = () => {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   const [imageUpload, { isLoading: imageLoading }] = useImageUploadMutation();
   const [signup, { isLoading }] = useSignupMutation();
   const dispatch = useAppDispatch();
@@ -43,7 +45,7 @@ const Signup = () => {
         const res = await signup(data).unwrap();
         dispatch(addUser({ user: res.data, token: res.token as string }));
         toast.success(res?.message);
-        router.push("/");
+        router.push(redirect);
       }
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to sign up. Please try again.");

@@ -8,11 +8,13 @@ import { FormInput } from "@/components/form/FormInput";
 import Link from "next/link";
 import { SubmitHandler } from "react-hook-form";
 import { TSigninValue, addUser, useLoginMutation } from "@/redux/features/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 
 const SignIn = () => {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -23,7 +25,7 @@ const SignIn = () => {
       const res = await login(data).unwrap();
       dispatch(addUser({ user: res.data, token: res.token as string }));
       toast.success(res?.message);
-      router.push("/");
+      router.push(redirect as string);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to login. Please try again.");
     }
@@ -88,7 +90,7 @@ const SignIn = () => {
         <Text className="text-center text-sm text-gray-600 mt-6" variant="p5">
           Don’t have an account?{" "}
           <Link
-            href="/signup"
+            href={`/signup?redirect=${redirect}`}
             className="text-primary hover:underline hover:text-[#9747ff]"
           >
             Sign up
