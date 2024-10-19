@@ -11,6 +11,7 @@ export type TUser = {
   status: "active" | "deleted";
   profilePicture: string;
   __v: number;
+  isPremium: boolean;
 };
 
 export type TAuthState = {

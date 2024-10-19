@@ -14,6 +14,8 @@ import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
+import { toast } from "sonner"; // Importing toast from sonner
+import { Checkbox } from "antd";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -23,11 +25,13 @@ type TCreatePostValue = {
   content: string;
   category: string;
   image?: File;
+  monetization?: boolean; // New monetization option
 };
 
 const CreatePost = () => {
   const currentUser = useAppSelector(getCurrentUser);
   const [content, setContent] = useState<string>("");
+  const [isMonetized, setIsMonetized] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
@@ -43,11 +47,22 @@ const CreatePost = () => {
     return <AuthPrompt />;
   }
 
-  const onSubmit: SubmitHandler<TCreatePostValue> = async (data) => {
-    console.log("Creating post with data:", { ...data, content });
+  const handleMonetized = () => {
+    if (!currentUser?.isPremium) {
+      toast.error("You need a premium account to monetize your post.");
+      return;
+    }
+    setIsMonetized(!isMonetized);
   };
 
-  // Category options
+  const onSubmit: SubmitHandler<TCreatePostValue> = async (data) => {
+    console.log("Creating post with data:", {
+      ...data,
+      content,
+      monetization: isMonetized,
+    });
+  };
+
   const categoryOptions = [
     { value: "tip", label: "Tip" },
     { value: "story", label: "Story" },
@@ -60,12 +75,10 @@ const CreatePost = () => {
       </Text>
 
       <FormWrapper onSubmit={onSubmit}>
-        {/* Post Title */}
         <FormInput
           name="title"
           label="Post Title"
           placeholder="Enter post title"
-          required
           divStyle={{ marginBottom: "20px" }}
         />
 
@@ -73,6 +86,7 @@ const CreatePost = () => {
           name="category"
           label="Category"
           options={categoryOptions}
+          placeholder="Select Category"
         />
 
         <div className="mb-10">
@@ -84,19 +98,21 @@ const CreatePost = () => {
             value={content}
             onChange={setContent}
             placeholder="Write your post here..."
-            className="bg-white 1rounded-md !h-[320px] !p-2"
+            className="bg-white rounded-md !h-[320px] !p-2"
           />
         </div>
 
-        {/* Image Upload */}
         <div className="mt-6 mb-6 bg-gray-100 p-4 rounded-lg">
-          <Text variant="p4" className="mb-2">
-            Upload Images
-          </Text>
           <FormUpload name="files" multiple={true} />
         </div>
+        <div className="flex items-center space-x-2 mb-6">
+          <Checkbox checked={isMonetized} onChange={handleMonetized}>
+            <label htmlFor="monetization" className="text-sm text-gray-600">
+              Monetize this post (Premium users only)
+            </label>
+          </Checkbox>
+        </div>
 
-        {/* Submit Button */}
         <Button htmlType="submit" customColor="primary" className="w-full mt-6">
           <Text className="text-white" variant="p3">
             Publish Post
