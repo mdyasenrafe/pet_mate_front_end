@@ -21,10 +21,6 @@ export const LeftSideBar = () => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) {
-    return null;
-  }
-
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -63,7 +59,7 @@ export const LeftSideBar = () => {
             Post
           </Button>
         </div>
-        {currentUser?._id && (
+        {currentUser?._id && isMounted && (
           <div
             className="fixed bottom-8 flex items-center justify-center space-x-2 cursor-pointer"
             onClick={handleLogout}

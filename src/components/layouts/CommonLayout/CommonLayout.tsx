@@ -3,7 +3,7 @@ import { Row, Col } from "antd";
 import { TProps } from "@/types";
 import React from "react";
 import { BottomNavBar } from "../BottomNavbar";
-import { LeftSideBar, RightSideBar } from "./componens";
+import { LeftSideBar, RightSideBar } from "./components";
 
 export const CommonLayout: React.FC<TProps> = ({ children }) => {
   return (
