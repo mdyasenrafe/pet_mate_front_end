@@ -1,9 +1,7 @@
 import { baseApi } from "@/api/baseApi";
 import { TCreatePostRequest, TPost, TUpdatePostRequest } from "./post.type";
 import { TQueryParams, TResponse } from "../types";
-import { TreeProps } from "antd";
 
-// Define the API endpoints related to posts
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getRandomPosts: builder.query<TResponse<TPost[]>, TQueryParams[]>({
