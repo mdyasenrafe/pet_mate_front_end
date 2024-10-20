@@ -8,6 +8,7 @@ import {
   FormInput,
   FormSelect,
   FormUpload,
+  FormReactQuili,
 } from "@/components/form";
 import { Button, Text, AuthPrompt, Container } from "@/components/atoms";
 import { SubmitHandler } from "react-hook-form";
@@ -84,7 +85,6 @@ const CreatePost = () => {
 
     const bodyData = {
       ...data,
-      content,
       files: uploadedFiles,
       monetization: isMonetized,
     };
@@ -120,15 +120,10 @@ const CreatePost = () => {
           />
 
           <div className="mb-10">
-            <Text variant="p4" className="mb-2">
-              Post Content
-            </Text>
-            <ReactQuill
-              theme="snow"
-              value={content}
-              onChange={setContent}
+            <FormReactQuili
+              name="content"
+              label="Post Content"
               placeholder="Write your post here..."
-              className="bg-white rounded-md !h-[320px] !p-2"
             />
           </div>
 

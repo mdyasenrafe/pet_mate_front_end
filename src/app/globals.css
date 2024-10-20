@@ -105,3 +105,9 @@ input:focus {
 .bg-black {
   background-color: var(--color-black);
 }
+
+.ql-editor {
+  height: 270px !important;
+  max-height: 250px !important;
+  overflow: auto;
+}
