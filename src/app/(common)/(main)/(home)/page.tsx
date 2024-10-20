@@ -30,11 +30,10 @@ const Home = () => {
   return (
     <Container>
       <div className="my-10">
-        <div className="mb-8">
+        <div className="mb-10">
           <Text variant="h2" className="text-center">
             PetMate Feed
           </Text>
-          <hr />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
