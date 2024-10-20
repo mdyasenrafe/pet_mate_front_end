@@ -1,9 +1,12 @@
 "use client";
 
 import { Text } from "@/components/atoms";
+import dynamic from "next/dynamic";
 import React from "react";
 import { Controller } from "react-hook-form";
-import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type FormReactQuiliProps = {
   label: string;

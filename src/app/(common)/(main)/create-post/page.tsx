@@ -12,15 +12,10 @@ import {
 } from "@/components/form";
 import { Button, Text, AuthPrompt, Container } from "@/components/atoms";
 import { SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
 import { toast } from "sonner";
 import { Checkbox } from "antd";
 import { useFileUploadMutation } from "@/api/updloadApi";
-import { TCreatePostRequest } from "@/redux/features/post/post.type";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import { TFile } from "@/redux/features/post/post.type";
 
 type TCreatePostValue = {
   title: string;
@@ -30,14 +25,8 @@ type TCreatePostValue = {
   monetization?: boolean;
 };
 
-type TFile = {
-  url: string;
-  type: "image" | "pdf";
-};
-
 const CreatePost = () => {
   const currentUser = useAppSelector(getCurrentUser);
-  const [content, setContent] = useState<string>("");
   const [isMonetized, setIsMonetized] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
   const [fileUpload, { isLoading: isFileUploading }] = useFileUploadMutation();
