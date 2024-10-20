@@ -14,18 +14,17 @@ import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import { toast } from "sonner"; // Importing toast from sonner
+import { toast } from "sonner";
 import { Checkbox } from "antd";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-// Define the form values
 type TCreatePostValue = {
   title: string;
   content: string;
   category: string;
-  image?: File;
-  monetization?: boolean; // New monetization option
+  files?: string[];
+  monetization?: boolean;
 };
 
 const CreatePost = () => {
@@ -39,11 +38,7 @@ const CreatePost = () => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) {
-    return null;
-  }
-
-  if (!currentUser?._id) {
+  if (!currentUser?._id && isMounted) {
     return <AuthPrompt />;
   }
 
@@ -61,6 +56,8 @@ const CreatePost = () => {
       content,
       monetization: isMonetized,
     });
+    const files = data.files; // based 64 data
+    //
   };
 
   const categoryOptions = [

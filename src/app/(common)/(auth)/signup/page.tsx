@@ -16,14 +16,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 import { FormUpload } from "@/components/form";
-import { useImageUploadMutation } from "@/api/updloadApi";
+import { useFileUploadMutation } from "@/api/updloadApi";
 import { signupSchema } from "@/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Signup = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
-  const [imageUpload, { isLoading: imageLoading }] = useImageUploadMutation();
+  const [imageUpload, { isLoading: imageLoading }] = useFileUploadMutation();
   const [signup, { isLoading }] = useSignupMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
