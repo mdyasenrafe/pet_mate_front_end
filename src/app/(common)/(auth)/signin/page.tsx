@@ -11,6 +11,8 @@ import { TSigninValue, addUser, useLoginMutation } from "@/redux/features/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
+import { signinSchema } from "@/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const SignIn = () => {
   const searchParams = useSearchParams();
@@ -52,7 +54,7 @@ const SignIn = () => {
           heartwarming stories.
         </Text>
 
-        <FormWrapper onSubmit={onSubmit}>
+        <FormWrapper onSubmit={onSubmit} resolver={zodResolver(signinSchema)}>
           <FormInput
             name="email"
             label="Email Address"

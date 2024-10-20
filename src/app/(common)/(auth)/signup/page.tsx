@@ -17,7 +17,7 @@ import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 import { FormUpload } from "@/components/form";
 import { useFileUploadMutation } from "@/api/updloadApi";
-import { signupSchema } from "@/Schema";
+import { signupSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Signup = () => {
