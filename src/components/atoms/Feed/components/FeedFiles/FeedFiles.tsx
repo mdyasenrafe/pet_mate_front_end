@@ -12,12 +12,10 @@ export const FeedFiles: React.FC<FeedFilesProps> = ({ files }) => (
         {files.map((file, index) => {
           if (file.type === "image") {
             return (
-              <Image
+              <img
                 key={index}
                 src={file.url}
                 alt={`File-${index}`}
-                width={200}
-                height={200}
                 className="object-cover rounded-md"
               />
             );

@@ -15,7 +15,11 @@ import { SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { Checkbox } from "antd";
 import { useFileUploadMutation } from "@/api/updloadApi";
-import { TFile } from "@/redux/features/post/post.type";
+import { TCreatePostRequest, TFile } from "@/redux/features/post/post.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createPostValidationSchema } from "@/schema";
+import { useCreatePostMutation } from "@/redux/features/post/post.api";
+import { useRouter } from "next/navigation";
 
 type TCreatePostValue = {
   title: string;
@@ -30,11 +34,11 @@ const CreatePost = () => {
   const [isMonetized, setIsMonetized] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
   const [fileUpload, { isLoading: isFileUploading }] = useFileUploadMutation();
-
+  const [createPost, { isLoading }] = useCreatePostMutation();
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
+  const router = useRouter();
   if (!currentUser?._id && isMounted) {
     return <AuthPrompt />;
   }
@@ -48,15 +52,14 @@ const CreatePost = () => {
   };
 
   const onSubmit: SubmitHandler<TCreatePostValue> = async (data) => {
-    let uploadedFiles: TFile[] = [];
+    try {
+      let uploadedFiles: TFile[] = [];
 
-    if (data.files) {
-      for (const file of data.files) {
-        try {
+      if (data.files) {
+        for (const file of data.files) {
           const fileType = file.split(";")[0].split(":")[1];
-          const uploadResult = await fileUpload({
-            file: file,
-          }).unwrap();
+          const uploadResult = await fileUpload({ file }).unwrap();
+
           if (uploadResult?.data?.url) {
             uploadedFiles.push({
               url: uploadResult.data.url,
@@ -65,20 +68,22 @@ const CreatePost = () => {
           } else {
             toast.error("Failed to upload a file. Please try again.");
           }
-        } catch (error) {
-          console.error("Error uploading file:", error);
-          toast.error("An error occurred while uploading a file.");
         }
       }
+
+      const bodyData = {
+        ...data,
+        files: uploadedFiles,
+        monetization: isMonetized,
+      };
+
+      const res = await createPost(bodyData as TCreatePostRequest).unwrap();
+      toast.success(res?.message || "Post created successfully");
+      router.push("/");
+    } catch (err: any) {
+      console.error("Error:", err);
+      toast.error(err?.data?.message || "Something went wrong");
     }
-
-    const bodyData = {
-      ...data,
-      files: uploadedFiles,
-      monetization: isMonetized,
-    };
-
-    console.log("Creating post with data:", bodyData);
   };
 
   const categoryOptions = [
@@ -89,11 +94,25 @@ const CreatePost = () => {
   return (
     <Container>
       <div className="my-10">
-        <Text variant="h2" className="mb-6 text-center">
-          Create a New Post
-        </Text>
+        <div className="">
+          <Text variant="h2" className="mb-6 text-center">
+            Create a New Post
+          </Text>
+          <Text
+            variant="p3"
+            style={{ textAlign: "center", maxWidth: 600, margin: "auto" }}
+            className="text-black pb-16"
+          >
+            Share your pet care tips or heartwarming stories with the PetMate
+            community. Whether it's advice on pet health, grooming, or just an
+            inspiring tale of your pet's journey, let your voice be heard.
+          </Text>
+        </div>
 
-        <FormWrapper onSubmit={onSubmit}>
+        <FormWrapper
+          onSubmit={onSubmit}
+          resolver={zodResolver(createPostValidationSchema)}
+        >
           <FormInput
             name="title"
             label="Post Title"
@@ -131,6 +150,8 @@ const CreatePost = () => {
             htmlType="submit"
             customColor="primary"
             className="w-full mt-6"
+            disabled={isFileUploading || isLoading}
+            loading={isFileUploading || isLoading}
           >
             <Text className="text-white" variant="p3">
               Publish Post
