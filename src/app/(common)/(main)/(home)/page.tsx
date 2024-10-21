@@ -2,11 +2,31 @@
 
 import { Container, Feed, Text } from "@/components/atoms";
 import { LoadingSpinner } from "@/components/atoms/LoadingSpinner";
-import { useGetRandomPostsQuery } from "@/redux/features/post/post.api";
-import { Spin } from "antd";
+import { useAppSelector } from "@/redux";
+import { getCurrentUser } from "@/redux/features/auth";
+import {
+  useGetPostsQuery,
+  useGetRandomPostsQuery,
+} from "@/redux/features/post/post.api";
 
 const Home = () => {
-  const { data, error, isLoading } = useGetRandomPostsQuery([]);
+  const currentUser = useAppSelector(getCurrentUser);
+  const {
+    data: randomPosts,
+    error: randomPostsError,
+    isLoading: isRandomPostsLoading,
+  } = useGetRandomPostsQuery([{ name: "status", value: "published" }], {
+    skip: currentUser?._id ? true : false,
+  });
+  const {
+    data: posts,
+    error: getPostsError,
+    isLoading: getPostsLoading,
+  } = useGetPostsQuery([], { skip: !currentUser?._id ? true : false });
+
+  const error = currentUser?._id ? getPostsError : randomPostsError;
+  const isLoading = currentUser?._id ? getPostsLoading : isRandomPostsLoading;
+  const postData = currentUser?._id ? posts?.data : randomPosts?.data;
 
   if (error) {
     return (
@@ -31,7 +51,7 @@ const Home = () => {
           <LoadingSpinner />
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {data?.data?.map((post) => (
+            {postData?.map((post) => (
               <Feed key={post._id} post={post} />
             ))}
           </div>
