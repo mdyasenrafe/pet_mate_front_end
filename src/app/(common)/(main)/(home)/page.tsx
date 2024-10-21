@@ -1,21 +1,12 @@
 "use client";
 
 import { Container, Feed, Text } from "@/components/atoms";
+import { LoadingSpinner } from "@/components/atoms/LoadingSpinner";
 import { useGetRandomPostsQuery } from "@/redux/features/post/post.api";
 import { Spin } from "antd";
 
 const Home = () => {
   const { data, error, isLoading } = useGetRandomPostsQuery([]);
-
-  if (isLoading) {
-    return (
-      <Container>
-        <div className="flex justify-center items-center h-full">
-          <Spin size="large" />
-        </div>
-      </Container>
-    );
-  }
 
   if (error) {
     return (
@@ -36,11 +27,15 @@ const Home = () => {
           </Text>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
-          {data?.data?.map((post) => (
-            <Feed key={post._id} post={post} />
-          ))}
-        </div>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="grid grid-cols-1 gap-6">
+            {data?.data?.map((post) => (
+              <Feed key={post._id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </Container>
   );
