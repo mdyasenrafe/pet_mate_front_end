@@ -1,15 +1,20 @@
+"use client";
+
 import { Card, Dropdown, Button } from "antd";
 import { FaEllipsisV } from "react-icons/fa";
 import { TPost } from "@/redux/features/post/post.type";
 import { FeedAuthorInfo, FeedBottom, FeedFiles } from "./components";
 import React from "react";
 import { Text } from "..";
+import { useRouter } from "next/navigation";
 
 type FeedProps = {
   post: TPost;
 };
 
 export const Feed: React.FC<FeedProps> = ({ post }) => {
+  const router = useRouter();
+
   const items = [
     {
       label: "Edit Post",
@@ -30,12 +35,23 @@ export const Feed: React.FC<FeedProps> = ({ post }) => {
       .replace(/<p>/g, '<p class="text-base leading-relaxed">'),
   });
 
+  const handleCardClick = () => {
+    router.push(`/post-details/${post._id}`);
+  };
+
   return (
-    <Card className="mb-6 rounded-md shadow-lg p-6">
+    <Card
+      className="mb-6 rounded-md shadow-lg p-6 !cursor-pointer"
+      onClick={handleCardClick} // Add onClick event for the card
+    >
       <div className="flex justify-between items-start mb-3">
         <FeedAuthorInfo post={post} />
         <Dropdown menu={{ items }} trigger={["click"]}>
-          <Button shape="circle" icon={<FaEllipsisV />} />
+          <Button
+            shape="circle"
+            icon={<FaEllipsisV />}
+            onClick={(e) => e.stopPropagation()} // Prevent redirect when the menu is clicked
+          />
         </Dropdown>
       </div>
 

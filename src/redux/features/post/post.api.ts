@@ -76,6 +76,13 @@ export const postsApi = baseApi.injectEndpoints({
         params: { type },
       }),
     }),
+    getPostDetails: builder.query<TResponse<TPost>, string>({
+      query: (postId) => ({
+        url: `/post/${postId}/details`,
+        method: "GET",
+      }),
+      providesTags: ["Post"],
+    }),
   }),
 });
 
@@ -88,4 +95,5 @@ export const {
   useDownvotePostMutation,
   useGetRandomPostsQuery,
   useUndoVotePostMutation,
+  useGetPostDetailsQuery,
 } = postsApi;
