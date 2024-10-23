@@ -66,6 +66,16 @@ export const postsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    undoVotePost: builder.mutation<
+      TResponse<TPost>,
+      { postId: string; type: string }
+    >({
+      query: ({ postId, type }) => ({
+        url: `/post/${postId}/undo-vote`,
+        method: "POST",
+        params: { type },
+      }),
+    }),
   }),
 });
 
@@ -77,4 +87,5 @@ export const {
   useUpvotePostMutation,
   useDownvotePostMutation,
   useGetRandomPostsQuery,
+  useUndoVotePostMutation,
 } = postsApi;

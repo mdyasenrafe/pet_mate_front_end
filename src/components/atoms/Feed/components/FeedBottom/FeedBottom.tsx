@@ -13,6 +13,7 @@ import { getCurrentUser } from "@/redux/features/auth";
 import {
   useUpvotePostMutation,
   useDownvotePostMutation,
+  useUndoVotePostMutation,
 } from "@/redux/features/post/post.api";
 
 type FeedBottomProps = {
@@ -28,7 +29,6 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
     post.downvotedBy.some((user) => user._id === currentUser?._id)
   );
 
-  // Local state to handle the vote counts
   const [localUpvoteCount, setLocalUpvoteCount] = useState<number>(
     post.upvoteCount
   );
@@ -36,14 +36,14 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
     post.downvoteCount
   );
 
-  // API mutation hooks for upvote/downvote
   const [upvotePost] = useUpvotePostMutation();
   const [downvotePost] = useDownvotePostMutation();
+  const [undoVotePost] = useUndoVotePostMutation();
 
   const handleUpvote = async () => {
     if (hasUpvoted) {
-      console.log("User has already upvoted");
-      // API call for toggling upvote can be added later if required
+      setLocalUpvoteCount(localUpvoteCount - 1);
+      setHasUpvoted(false);
     } else {
       setLocalUpvoteCount(localUpvoteCount + 1);
       setHasUpvoted(true);
@@ -52,21 +52,25 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
         setLocalDownvoteCount(localDownvoteCount - 1);
         setHasDownvoted(false);
       }
+    }
 
-      // Call the upvote API
-      try {
+    try {
+      if (hasUpvoted) {
+        await undoVotePost({ postId: post._id, type: "upvote" }).unwrap();
+        console.log("User undid upvote successfully");
+      } else {
         await upvotePost(post._id).unwrap();
         console.log("User upvoted successfully");
-      } catch (error) {
-        console.error("Failed to upvote post:", error);
       }
+    } catch (error) {
+      console.error("Failed to handle upvote:", error);
     }
   };
 
   const handleDownvote = async () => {
     if (hasDownvoted) {
-      console.log("User has already downvoted");
-      // API call for toggling downvote can be added later if required
+      setLocalDownvoteCount(localDownvoteCount - 1);
+      setHasDownvoted(false);
     } else {
       setLocalDownvoteCount(localDownvoteCount + 1);
       setHasDownvoted(true);
@@ -75,14 +79,18 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
         setLocalUpvoteCount(localUpvoteCount - 1);
         setHasUpvoted(false);
       }
+    }
 
-      // Call the downvote API
-      try {
+    try {
+      if (hasDownvoted) {
+        await undoVotePost({ postId: post._id, type: "downvote" }).unwrap();
+        console.log("User undid downvote successfully");
+      } else {
         await downvotePost(post._id).unwrap();
         console.log("User downvoted successfully");
-      } catch (error) {
-        console.error("Failed to downvote post:", error);
       }
+    } catch (error) {
+      console.error("Failed to handle downvote:", error);
     }
   };
 
