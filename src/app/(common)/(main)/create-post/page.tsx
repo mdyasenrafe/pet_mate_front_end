@@ -99,7 +99,7 @@ const CreatePost = () => {
             Create a New Post
           </Text>
           <Text
-            variant="p3"
+            variant="p4"
             style={{ textAlign: "center", maxWidth: 600, margin: "auto" }}
             className="text-black pb-16"
           >

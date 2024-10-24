@@ -111,3 +111,8 @@ input:focus {
   max-height: 250px !important;
   overflow: auto;
 }
+
+.ant-modal-title {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 24px !important;
+}

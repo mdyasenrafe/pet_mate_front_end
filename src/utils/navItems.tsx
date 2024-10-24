@@ -13,8 +13,8 @@ export const navItems: NavItem[] = [
   },
   {
     id: 2,
-    label: "Feed",
-    path: "/feed",
+    label: "Search",
+    path: "/search",
     icon: CiSearch,
     desktop: true,
   },
