@@ -42,7 +42,7 @@ export const Feed: React.FC<FeedProps> = ({ post }) => {
   return (
     <Card
       className="mb-6 rounded-md shadow-lg p-6 !cursor-pointer"
-      onClick={handleCardClick} // Add onClick event for the card
+      onClick={handleCardClick}
     >
       <div className="flex justify-between items-start mb-3">
         <FeedAuthorInfo post={post} />
@@ -50,7 +50,7 @@ export const Feed: React.FC<FeedProps> = ({ post }) => {
           <Button
             shape="circle"
             icon={<FaEllipsisV />}
-            onClick={(e) => e.stopPropagation()} // Prevent redirect when the menu is clicked
+            onClick={(e) => e.stopPropagation()}
           />
         </Dropdown>
       </div>

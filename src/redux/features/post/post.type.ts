@@ -22,6 +22,7 @@ export type TPost = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  comments: TComment[];
 };
 
 export interface TCreatePostRequest {
@@ -40,3 +41,17 @@ export interface TUpdatePostRequest {
   files?: TFile[];
   monetization?: boolean;
 }
+
+export type TComment = {
+  post: TPost;
+  author: TUser;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TCreateCommentRequest = {
+  post: string;
+  author: string;
+  content: string;
+};

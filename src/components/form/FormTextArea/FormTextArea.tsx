@@ -4,25 +4,31 @@ import { Form, Input } from "antd";
 import React from "react";
 import { Controller } from "react-hook-form";
 import { Text } from "../../atoms";
+import { TextAreaProps } from "antd/es/input";
+import { PiDropSimpleLight } from "react-icons/pi";
 
-type TFormTextAreaProps = {
+type TFormTextAreaProps = TextAreaProps & {
   name: string;
   label?: string;
 };
 
-export const FormTextArea: React.FC<TFormTextAreaProps> = ({ name, label }) => {
+export const FormTextArea: React.FC<TFormTextAreaProps> = ({
+  name,
+  label,
+  ...props
+}) => {
   return (
-    <div style={{ marginBottom: "20px" }}>
+    <div>
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => (
-          <Form.Item label={<Text variant="p2">{label}</Text>}>
+          <Form.Item>
             <Input.TextArea
               {...field}
+              {...props}
               id={name}
               size="large"
               maxLength={2000}
-              autoSize={{ minRows: 7, maxRows: 7 }}
               className="font-poppins text-[14px]"
             />
             {error && (

@@ -1,5 +1,10 @@
 import { baseApi } from "@/api/baseApi";
-import { TCreatePostRequest, TPost, TUpdatePostRequest } from "./post.type";
+import {
+  TCreateCommentRequest,
+  TCreatePostRequest,
+  TPost,
+  TUpdatePostRequest,
+} from "./post.type";
 import { TQueryParams, TResponse } from "../types";
 
 export const postsApi = baseApi.injectEndpoints({
@@ -83,6 +88,14 @@ export const postsApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Post"],
     }),
+    addComment: builder.mutation<TResponse<TPost>, TCreateCommentRequest>({
+      query: (newComment) => ({
+        url: "/comment",
+        method: "POST",
+        body: newComment,
+      }),
+      invalidatesTags: ["Post"],
+    }),
   }),
 });
 
@@ -96,4 +109,5 @@ export const {
   useGetRandomPostsQuery,
   useUndoVotePostMutation,
   useGetPostDetailsQuery,
+  useAddCommentMutation,
 } = postsApi;
