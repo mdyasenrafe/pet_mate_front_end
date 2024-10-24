@@ -1,17 +1,19 @@
 "use client";
 
-import { AuthPrompt, Container, Text, Button, Feed } from "@/components/atoms";
+import React, { useEffect, useState } from "react";
+import {
+  AuthPrompt,
+  Container,
+  Text,
+  Button,
+  Feed,
+  LoadingSpinner,
+} from "@/components/atoms";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
 import { useGetPostsQuery } from "@/redux/features/post/post.api";
-import React, { useEffect, useState } from "react";
-import { Input, Select } from "antd";
-import { Modal } from "@/components/Modal";
 import { useModal } from "@/hooks";
-import { LoadingSpinner } from "@/components/atoms/LoadingSpinner";
-import { TPost } from "@/redux/features/post/post.type";
-
-const { Search } = Input;
+import { FilterModal, SearchBar, SortSelect } from "./components";
 
 const SearchPage = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -38,7 +40,6 @@ const SearchPage = () => {
 
   const {
     data: posts,
-    error: getPostsError,
     isLoading: getPostsLoading,
     isFetching,
   } = useGetPostsQuery(params, {
@@ -66,22 +67,18 @@ const SearchPage = () => {
 
   const handleApplyFilters = () => {
     let newParams = [...params];
-
     if (tempParams.searchTerm) {
       newParams = newParams.filter((p) => p.name !== "searchTerm");
       newParams.push({ name: "searchTerm", value: tempParams.searchTerm });
     }
-
     if (tempParams.category) {
       newParams = newParams.filter((p) => p.name !== "category");
       newParams.push({ name: "category", value: tempParams.category });
     }
-
     if (tempParams.monetization !== undefined) {
       newParams = newParams.filter((p) => p.name !== "monetization");
       newParams.push({ name: "monetization", value: tempParams.monetization });
     }
-
     setParams(newParams);
     closeModal();
   };
@@ -89,7 +86,6 @@ const SearchPage = () => {
   const handleResetFilters = () => {
     setTempParams({});
     setSearchKeyword("");
-
     setParams([
       { name: "limit", value: 10 },
       { name: "status", value: "published" },
@@ -123,43 +119,28 @@ const SearchPage = () => {
           filter and sorting options to find exactly what you're looking for.
         </Text>
 
-        <div className="mb-6">
-          <Search
-            placeholder="Search by title or content"
-            enterButton
-            onSearch={handleSearch}
-            value={searchKeyword}
-            onChange={handleSearchChange}
-          />
-        </div>
+        <SearchBar
+          searchKeyword={searchKeyword}
+          handleSearchChange={handleSearchChange}
+          handleSearch={handleSearch}
+        />
 
         <div className="flex justify-between mb-10">
           <Button onClick={openModal} customColor="primary">
             Filter
           </Button>
 
-          <Select
-            defaultValue="Sort By"
-            style={{ width: 200 }}
-            onChange={handleSortChange}
-            options={[
-              { label: "Most Recent", value: "-createdAt" },
-              { label: "Most Upvoted", value: "-upvoteCount" },
-              { label: "Most Commented", value: "-commentCount" },
-            ]}
-          />
+          <SortSelect handleSortChange={handleSortChange} />
         </div>
 
         {getPostsLoading || !isMounted || isFetching ? (
           <LoadingSpinner />
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {(posts?.data?.length as number) > 0 ? (
-              <>
-                {posts?.data?.map((post) => (
-                  <Feed key={post._id} post={post} />
-                ))}
-              </>
+            {posts?.data?.length ? (
+              posts?.data?.map((post: any) => (
+                <Feed key={post._id} post={post} />
+              ))
             ) : (
               <Text variant="p3" className="text-center text-gray-500">
                 No posts found matching your criteria.
@@ -168,59 +149,14 @@ const SearchPage = () => {
           </div>
         )}
 
-        <Modal
+        <FilterModal
           isModalOpen={isModalOpen}
           closeModal={closeModal}
-          title="Filter Options"
-        >
-          <div>
-            <Text variant="p3" className="mb-4">
-              Select filter options to refine your search.
-            </Text>
-
-            <label className="block text-sm mb-2">Category</label>
-            <Select
-              value={tempParams.category}
-              defaultValue="Category"
-              style={{ width: "100%", marginBottom: "20px" }}
-              onChange={(value) => handleTempParamsChange("category", value)}
-              options={[
-                { label: "Tips", value: "tip" },
-                { label: "Stories", value: "story" },
-              ]}
-            />
-
-            <label className="block text-sm mb-2">Monetization</label>
-            <Select
-              value={tempParams.monetization}
-              defaultValue="Monetization"
-              style={{ width: "100%" }}
-              onChange={(value) =>
-                handleTempParamsChange("monetization", value)
-              }
-              options={[
-                { label: "Monetized", value: true },
-                { label: "Non-monetized", value: false },
-              ]}
-            />
-          </div>
-
-          <Button
-            onClick={handleApplyFilters}
-            customColor="primary"
-            className="mt-4"
-          >
-            Apply Filters
-          </Button>
-
-          <Button
-            onClick={handleResetFilters}
-            customColor="secondary"
-            className="mt-4"
-          >
-            Reset Filters
-          </Button>
-        </Modal>
+          tempParams={tempParams}
+          handleTempParamsChange={handleTempParamsChange}
+          handleApplyFilters={handleApplyFilters}
+          handleResetFilters={handleResetFilters}
+        />
       </div>
     </Container>
   );

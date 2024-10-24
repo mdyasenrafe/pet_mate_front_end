@@ -3,3 +3,4 @@ export * from "./Container";
 export * from "./Text";
 export * from "./AuthPrompt";
 export * from "./Feed";
+export * from "./LoadingSpinner";
