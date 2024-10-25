@@ -67,7 +67,7 @@ const PostPage: React.FC<Props> = ({ params }) => {
 
         {/* Post Content */}
         <div className="">
-          <Feed post={data?.data as TPost} />
+          <Feed post={data?.data as TPost} isAuthor={false} />
         </div>
 
         <div className="mt-8 bg-gray-50 shadow-sm rounded-lg p-6">
