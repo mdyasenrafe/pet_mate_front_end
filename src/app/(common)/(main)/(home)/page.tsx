@@ -1,13 +1,14 @@
 "use client";
 
-import { Container, Feed, Text } from "@/components/atoms";
+import { Container, PostFeed, Text } from "@/components/atoms";
 import { LoadingSpinner } from "@/components/atoms/LoadingSpinner";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
 import {
   useGetPostsQuery,
   useGetRandomPostsQuery,
-} from "@/redux/features/post/post.api";
+  TPost,
+} from "@/redux/features/post";
 
 const Home = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -50,11 +51,7 @@ const Home = () => {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {postData?.map((post) => (
-              <Feed key={post._id} post={post} />
-            ))}
-          </div>
+          <PostFeed posts={posts?.data as TPost[]} />
         )}
       </div>
     </Container>

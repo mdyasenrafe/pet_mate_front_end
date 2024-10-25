@@ -6,14 +6,14 @@ import {
   Container,
   Text,
   Button,
-  Feed,
   LoadingSpinner,
+  PostFeed,
 } from "@/components/atoms";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
-import { useGetPostsQuery } from "@/redux/features/post/post.api";
 import { useModal } from "@/hooks";
 import { FilterModal, SearchBar, SortSelect } from "./components";
+import { TPost, useGetPostsQuery } from "@/redux/features/post";
 
 const SearchPage = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -136,11 +136,9 @@ const SearchPage = () => {
         {getPostsLoading || !isMounted || isFetching ? (
           <LoadingSpinner />
         ) : (
-          <div className="grid grid-cols-1 gap-6">
+          <div>
             {posts?.data?.length !== 0 ? (
-              posts?.data?.map((post: any) => (
-                <Feed key={post._id} post={post} />
-              ))
+              <PostFeed posts={posts?.data as TPost[]} />
             ) : (
               <Text variant="p3" className="text-center text-gray-500">
                 No posts found matching your criteria.
