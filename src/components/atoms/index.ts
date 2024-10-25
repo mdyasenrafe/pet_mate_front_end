@@ -4,3 +4,4 @@ export * from "./Text";
 export * from "./AuthPrompt";
 export * from "./Feed";
 export * from "./LoadingSpinner";
+export * from "./PostFeed";

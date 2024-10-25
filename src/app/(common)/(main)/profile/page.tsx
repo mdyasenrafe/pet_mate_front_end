@@ -1,11 +1,5 @@
 "use client";
-import {
-  AuthPrompt,
-  Button,
-  Container,
-  LoadingSpinner,
-  Text,
-} from "@/components/atoms";
+import { AuthPrompt, Button, LoadingSpinner, Text } from "@/components/atoms";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
 import { formatRelativeTime } from "@/utils";
@@ -15,7 +9,7 @@ import { FiEdit } from "react-icons/fi";
 const page = () => {
   const currentUser = useAppSelector(getCurrentUser);
   const [isMounted, setIsMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState("posts"); // State to manage the active tab
+  const [activeTab, setActiveTab] = useState("posts");
 
   useEffect(() => {
     setIsMounted(true);
@@ -29,14 +23,12 @@ const page = () => {
     return <LoadingSpinner />;
   }
 
-  // Array of tab data
   const tabs = [
     { label: "My Posts", value: "posts" },
     { label: "Followers", value: "followers" },
     { label: "Deleted Posts", value: "deleted" },
   ];
 
-  // Function to render tab content based on the selected tab
   const renderTabContent = () => {
     switch (activeTab) {
       case "posts":
@@ -80,7 +72,6 @@ const page = () => {
       </div>
       <hr />
 
-      {/* Tab Navigation */}
       <div className="mt-4 flex space-x-4">
         {tabs.map((tab) => (
           <div

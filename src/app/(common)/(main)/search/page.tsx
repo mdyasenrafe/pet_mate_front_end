@@ -137,7 +137,7 @@ const SearchPage = () => {
           <LoadingSpinner />
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {posts?.data?.length ? (
+            {posts?.data?.length !== 0 ? (
               posts?.data?.map((post: any) => (
                 <Feed key={post._id} post={post} />
               ))
