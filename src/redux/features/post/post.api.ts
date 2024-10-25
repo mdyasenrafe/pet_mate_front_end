@@ -9,6 +9,19 @@ import { TQueryParams, TResponse } from "../types";
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getMyPosts: builder.query<TResponse<TPost[]>, TQueryParams[]>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return { url: "/post/my-posts", params: params };
+      },
+      providesTags: ["Post"],
+    }),
     getRandomPosts: builder.query<TResponse<TPost[]>, TQueryParams[]>({
       query: (args) => {
         const params = new URLSearchParams();
@@ -110,4 +123,5 @@ export const {
   useUndoVotePostMutation,
   useGetPostDetailsQuery,
   useAddCommentMutation,
+  useGetMyPostsQuery,
 } = postsApi;

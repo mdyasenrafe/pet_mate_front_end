@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/redux/features/auth";
 import { formatRelativeTime } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
+import { MyPosts } from "./components";
 
 const page = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -32,7 +33,7 @@ const page = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "posts":
-        return <Text>My Posts Content</Text>;
+        return <MyPosts />;
       case "followers":
         return <Text>Followers Content</Text>;
       case "deleted":
