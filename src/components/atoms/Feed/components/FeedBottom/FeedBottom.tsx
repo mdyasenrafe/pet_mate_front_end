@@ -40,7 +40,8 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
   const [downvotePost] = useDownvotePostMutation();
   const [undoVotePost] = useUndoVotePostMutation();
 
-  const handleUpvote = async () => {
+  const handleUpvote = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation to details page
     if (hasUpvoted) {
       setLocalUpvoteCount(localUpvoteCount - 1);
       setHasUpvoted(false);
@@ -67,7 +68,8 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
     }
   };
 
-  const handleDownvote = async () => {
+  const handleDownvote = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation to details page
     if (hasDownvoted) {
       setLocalDownvoteCount(localDownvoteCount - 1);
       setHasDownvoted(false);
