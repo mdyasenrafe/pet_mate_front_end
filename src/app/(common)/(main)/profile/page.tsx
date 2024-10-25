@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/redux/features/auth";
 import { formatRelativeTime } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import { MyPosts } from "./components";
+import { DeletedPosts, MyPosts } from "./components";
 
 const page = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -37,7 +37,7 @@ const page = () => {
       case "followers":
         return <Text>Followers Content</Text>;
       case "deleted":
-        return <Text>Deleted Posts Content</Text>;
+        return <DeletedPosts />;
       default:
         return <Text>My Posts Content</Text>;
     }
