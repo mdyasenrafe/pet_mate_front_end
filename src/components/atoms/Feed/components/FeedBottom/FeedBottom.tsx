@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Text } from "@/components/atoms";
-import { TPost } from "@/redux/features/post/post.type";
 import {
   FaRegCommentDots,
   FaRegThumbsDown,
@@ -14,7 +13,8 @@ import {
   useUpvotePostMutation,
   useDownvotePostMutation,
   useUndoVotePostMutation,
-} from "@/redux/features/post/post.api";
+  TPost,
+} from "@/redux/features/post";
 
 type FeedBottomProps = {
   post: TPost;
