@@ -10,6 +10,7 @@ const userApi = baseApi.injectEndpoints({
         return { url: "/users/me" };
       },
     }),
+
     getAllUsers: builder.query<TResponse<TUser[]>, TQueryParams[]>({
       query: (args) => {
         const params = new URLSearchParams();
@@ -18,11 +19,36 @@ const userApi = baseApi.injectEndpoints({
             params.append(item.name, item.value as string);
           });
         }
-
         return { url: "/users", params: params };
       },
       providesTags: ["Users"],
     }),
+
+    getRandomUsers: builder.query<TResponse<TUser[]>, TQueryParams[]>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+        return { url: "/users/random", params: params };
+      },
+      providesTags: ["Users"],
+    }),
+    getUsers: builder.query<TResponse<TUser[]>, TQueryParams[]>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+        return { url: "/users/users", params: params };
+      },
+      providesTags: ["Users"],
+    }),
+
     update: builder.mutation<TResponse<TUser>, TUpdateValue>({
       query: (data) => ({
         url: "users/me",
@@ -38,6 +64,7 @@ const userApi = baseApi.injectEndpoints({
         }
       },
     }),
+
     updateRole: builder.mutation<TResponse<TUser>, string>({
       query: (id) => ({
         url: `users/role-update/${id}`,
@@ -45,6 +72,7 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+
     softDeleteUser: builder.mutation<TResponse<TUser>, string>({
       query: (id) => ({
         url: `users/change-status/${id}`,
@@ -52,13 +80,45 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+
+    followUser: builder.mutation<TResponse<TUser>, string>({
+      query: (followerId) => ({
+        url: `users/follow/${followerId}`,
+        method: "POST",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(updateUser(data?.data as TUser));
+        } catch (error) {
+          console.error("Failed to update user:", error);
+        }
+      },
+    }),
+    unfollowUser: builder.mutation<TResponse<TUser>, string>({
+      query: (followerId) => ({
+        url: `users/unfollow/${followerId}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(updateUser(data?.data as TUser));
+        } catch (error) {
+          console.error("Failed to update user:", error);
+        }
+      },
+    }),
   }),
 });
 
 export const {
   useMeQuery,
   useGetAllUsersQuery,
+  useGetRandomUsersQuery,
   useUpdateMutation,
   useUpdateRoleMutation,
   useSoftDeleteUserMutation,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
 } = userApi;
