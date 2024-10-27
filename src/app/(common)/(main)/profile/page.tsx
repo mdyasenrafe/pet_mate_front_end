@@ -5,9 +5,14 @@ import { getCurrentUser } from "@/redux/features/auth";
 import { formatRelativeTime } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import { DeletedPosts, MyPosts } from "./components";
+import {
+  DeletedPosts,
+  FollowersList,
+  FollowingList,
+  MyPosts,
+} from "./components";
 
-const page = () => {
+const ProfilePage = () => {
   const currentUser = useAppSelector(getCurrentUser);
   const [isMounted, setIsMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
@@ -36,30 +41,34 @@ const page = () => {
       case "posts":
         return <MyPosts />;
       case "followers":
-        return <Text>Followers Content</Text>;
+        return <FollowersList followers={currentUser?.followers || []} />;
       case "following":
-        return <Text>Following Content</Text>;
+        return <FollowingList following={currentUser?.following || []} />;
       case "deleted":
         return <DeletedPosts />;
       default:
-        return <Text>My Posts Content</Text>;
+        return <MyPosts />;
     }
   };
 
   return (
     <section className="mx-0 lg:mx-6 mt-10">
+      {/* Profile Header */}
       <div className="flex justify-between items-center pb-4">
-        <div className="flex items-center">
-          <div className="h-[100px] w-[100px]">
+        <div className="flex items-center space-x-4">
+          <div className="h-24 w-24 rounded-full overflow-hidden">
             <img
-              src={currentUser?.profilePicture}
-              className="w-full h-full rounded-full"
+              src={currentUser?.profilePicture || "/default-profile.png"}
+              alt={`${currentUser?.name}'s profile`}
+              className="w-full h-full object-cover"
             />
           </div>
-          <div className="ml-2">
-            <Text variant="h3">{currentUser?.name}</Text>
+          <div>
+            <Text variant="h3" className="font-semibold text-gray-800">
+              {currentUser?.name}
+            </Text>
             {currentUser?.createdAt && (
-              <Text variant="p3">
+              <Text variant="p3" className="text-gray-500">
                 Joined {formatRelativeTime(currentUser?.createdAt as string)}
               </Text>
             )}
@@ -69,20 +78,23 @@ const page = () => {
           icon={<FiEdit />}
           iconPosition="start"
           customColor="primary"
-          className="h-[40px]"
+          className="h-10 px-4 text-sm"
         >
-          Edit profile
+          Edit Profile
         </Button>
       </div>
       <hr />
 
-      <div className="mt-4 flex space-x-4">
+      {/* Tabs Navigation */}
+      <div className="mt-4 flex space-x-4 border-b border-gray-200">
         {tabs.map((tab) => (
           <div
             key={tab.value}
-            className={`px-4 py-2 ${
-              activeTab === tab.value ? "border-b-2 border-primary" : ""
-            } cursor-pointer`}
+            className={`px-4 py-2 font-medium text-sm cursor-pointer ${
+              activeTab === tab.value
+                ? "text-primary border-b-2 border-primary"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
             onClick={() => setActiveTab(tab.value)}
           >
             {tab.label}
@@ -90,10 +102,11 @@ const page = () => {
         ))}
       </div>
 
-      {/* Tab Content */}
-      <div className="mt-6">{renderTabContent()}</div>
+      <div className="mt-6 p-4 bg-white shadow rounded-lg">
+        {renderTabContent()}
+      </div>
     </section>
   );
 };
 
-export default page;
+export default ProfilePage;
