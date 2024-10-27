@@ -15,7 +15,7 @@ type FollowButtonProps = {
 export const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
   const currentUser = useAppSelector(getCurrentUser);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [isFollowers, setIsFollwers] = useState(false);
+  const [isFollower, setIsFollower] = useState(false);
 
   const [followUser, { isLoading: isFollowLoading }] = useFollowUserMutation();
   const [unfollowUser, { isLoading: isUnfollowLoading }] =
@@ -23,14 +23,14 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
 
   useEffect(() => {
     if (currentUser?._id) {
-      console.log(currentUser);
       const isAlreadyFollowing = currentUser.following.some(
         (user) => user._id === userId
       );
-      const isAlreadyFollwers = currentUser.followers.some(
+      const isAlreadyFollower = currentUser.followers.some(
         (user) => user._id === userId
       );
       setIsFollowing(isAlreadyFollowing);
+      setIsFollower(isAlreadyFollower);
     }
   }, [currentUser, userId]);
 
@@ -61,8 +61,9 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
       className="px-5 py-2 rounded-full text-sm font-semibold bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 transition-all duration-150"
       onClick={handleFollowClick}
       disabled={isFollowLoading || isUnfollowLoading}
+      loading={isFollowLoading || isUnfollowLoading}
     >
-      {isFollowing ? "Following" : "Follow"}
+      {isFollowing ? "Following" : isFollower ? "Follow Back" : "Follow"}
     </Button>
   );
 };

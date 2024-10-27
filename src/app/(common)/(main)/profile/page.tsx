@@ -27,6 +27,7 @@ const page = () => {
   const tabs = [
     { label: "My Posts", value: "posts" },
     { label: "Followers", value: "followers" },
+    { label: "Following", value: "following" },
     { label: "Deleted Posts", value: "deleted" },
   ];
 
@@ -36,6 +37,8 @@ const page = () => {
         return <MyPosts />;
       case "followers":
         return <Text>Followers Content</Text>;
+      case "following":
+        return <Text>Following Content</Text>;
       case "deleted":
         return <DeletedPosts />;
       default:
