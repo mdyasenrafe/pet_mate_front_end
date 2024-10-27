@@ -23,6 +23,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         onSearch={handleSearch}
         value={searchKeyword}
         onChange={handleSearchChange}
+        allowClear
       />
     </div>
   );

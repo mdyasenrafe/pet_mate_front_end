@@ -51,7 +51,7 @@ const Home = () => {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <PostFeed posts={posts?.data as TPost[]} />
+          <PostFeed posts={postData as TPost[]} />
         )}
       </div>
     </Container>

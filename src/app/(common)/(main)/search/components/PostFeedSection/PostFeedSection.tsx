@@ -1,4 +1,3 @@
-// components/PostFeedSection.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -100,14 +99,6 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
       return [...filteredParams, { name: "searchTerm", value }];
     });
   };
-
-  if (!currentUser?._id && isMounted) {
-    return (
-      <Text variant="p3" className="text-center text-gray-500">
-        Please log in to view posts.
-      </Text>
-    );
-  }
 
   return (
     <div>
