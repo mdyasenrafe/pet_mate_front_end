@@ -9,7 +9,7 @@ import {
 } from "@/components/atoms";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
-import { PostFeedSection } from "./components";
+import { PeopleFeedSection, PostFeedSection } from "./components";
 
 const SearchPage: React.FC = () => {
   const currentUser = useAppSelector(getCurrentUser);
@@ -45,36 +45,29 @@ const SearchPage: React.FC = () => {
         Browse through our collection of pet care tips, stories, and community
         members.
       </Text>
-
       <div className="flex justify-center mb-6 border-b border-gray-200">
-        <div
-          onClick={() => handleTabChange("post")}
-          className={`px-4 py-2 font-semibold focus:outline-none transition-colors duration-300 cursor-pointer ${
-            activeTab === "post"
-              ? "text-green-600 border-b-4 border-green-600"
-              : " hover:text-gray-800 "
-          }`}
-        >
-          Posts
-        </div>
-        <div
-          onClick={() => handleTabChange("people")}
-          className={`px-4 py-2 font-semibold focus:outline-none transition-colors duration-300 cursor-pointer ${
-            activeTab === "people"
-              ? "text-green-600 border-b-4 border-green-600"
-              : " hover:text-gray-800 "
-          }`}
-        >
-          People
-        </div>
+        {[
+          { label: "Posts", type: "post" },
+          { label: "People", type: "people" },
+        ].map((tab) => (
+          <div
+            key={tab.type}
+            onClick={() => handleTabChange(tab.type)}
+            className={`px-4 py-2 cursor-pointer transition-transform transform ${
+              activeTab === tab.type
+                ? "text-green-600 border-b-4 border-green-600"
+                : " hover:scale-105"
+            }`}
+          >
+            <Text variant="p4" className="!font-bold hover:text-green-400">
+              {tab.label}
+            </Text>
+          </div>
+        ))}
       </div>
 
       <Container>
-        {activeTab === "post" ? (
-          <PostFeedSection isMounted={isMounted} />
-        ) : (
-          <div></div>
-        )}
+        {activeTab === "post" ? <PostFeedSection /> : <PeopleFeedSection />}
       </Container>
     </div>
   );

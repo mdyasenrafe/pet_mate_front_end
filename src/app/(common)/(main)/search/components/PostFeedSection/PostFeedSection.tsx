@@ -8,24 +8,18 @@ import { useModal } from "@/hooks";
 import { TPost, useGetPostsQuery } from "@/redux/features/post";
 import { FilterModal, SearchBar, SortSelect } from "./components";
 
-interface ParamsType {
+type ParamsType = {
   name: string;
   value: any;
-}
+};
 
-interface TempParamsType {
+type TempParamsType = {
   searchTerm?: string;
   category?: string;
   monetization?: string;
-}
-
-type PostFeedSectionProps = {
-  isMounted: boolean;
 };
 
-export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
-  isMounted,
-}) => {
+export const PostFeedSection = () => {
   const currentUser = useAppSelector(getCurrentUser);
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -106,6 +100,7 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
         searchKeyword={searchKeyword}
         handleSearchChange={handleSearchChange}
         handleSearch={handleSearch}
+        placeholder="Search by title or content"
       />
 
       <div className="flex justify-between mb-10">

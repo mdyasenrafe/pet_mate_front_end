@@ -44,7 +44,7 @@ const userApi = baseApi.injectEndpoints({
             params.append(item.name, item.value as string);
           });
         }
-        return { url: "/users/users", params: params };
+        return { url: "/users", params: params };
       },
       providesTags: ["Users"],
     }),
@@ -121,4 +121,5 @@ export const {
   useSoftDeleteUserMutation,
   useFollowUserMutation,
   useUnfollowUserMutation,
+  useGetUsersQuery,
 } = userApi;
