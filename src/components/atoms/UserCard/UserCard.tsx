@@ -7,9 +7,10 @@ import { FollowButton } from "./components";
 
 type UserCardProps = {
   user: TUser;
+  isProfilePage?: boolean;
 };
 
-export const UserCard: React.FC<UserCardProps> = ({ user }) => {
+export const UserCard: React.FC<UserCardProps> = ({ user, isProfilePage }) => {
   return (
     <div className="user-card flex items-center justify-between p-4 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-200">
       <div className="flex items-center">
@@ -22,7 +23,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           {user.name}
         </Text>
       </div>
-      <FollowButton userId={user?._id} />
+      <FollowButton userId={user?._id} isProfilePage={isProfilePage} />
     </div>
   );
 };

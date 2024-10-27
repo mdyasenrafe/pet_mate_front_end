@@ -10,9 +10,13 @@ import { getCurrentUser } from "@/redux/features/auth";
 
 type FollowButtonProps = {
   userId: string;
+  isProfilePage?: boolean;
 };
 
-export const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
+export const FollowButton: React.FC<FollowButtonProps> = ({
+  userId,
+  isProfilePage = false,
+}) => {
   const currentUser = useAppSelector(getCurrentUser);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollower, setIsFollower] = useState(false);
@@ -63,7 +67,13 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
       disabled={isFollowLoading || isUnfollowLoading}
       loading={isFollowLoading || isUnfollowLoading}
     >
-      {isFollowing ? "Following" : isFollower ? "Follow Back" : "Follow"}
+      {isProfilePage && isFollowing
+        ? "Remove"
+        : isFollowing
+        ? "Following"
+        : isFollower
+        ? "Follow Back"
+        : "Follow"}
     </Button>
   );
 };
