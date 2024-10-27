@@ -40,7 +40,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
 
   const handleFollowClick = async () => {
     try {
-      if (isFollowing) {
+      if (isFollowing || isProfilePage) {
         await unfollowUser(userId).unwrap();
         toast.success("Successfully unfollowed the user!");
         setIsFollowing(false);
@@ -71,6 +71,8 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
         ? "Remove"
         : isFollowing
         ? "Following"
+        : isProfilePage && isFollower
+        ? "Remove"
         : isFollower
         ? "Follow Back"
         : "Follow"}
