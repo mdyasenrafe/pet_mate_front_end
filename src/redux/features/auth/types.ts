@@ -12,6 +12,8 @@ export type TUser = {
   profilePicture: string;
   __v: number;
   isPremium: boolean;
+  followers: TUser[];
+  following: TUser[];
 };
 
 export type TAuthState = {

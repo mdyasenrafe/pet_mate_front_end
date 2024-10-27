@@ -1,3 +1,5 @@
+"use client";
+
 import { baseApi } from "@/api/baseApi";
 import { TResponse } from "../types";
 import { TSigninValue, TSignupValue, TUser } from "./types";

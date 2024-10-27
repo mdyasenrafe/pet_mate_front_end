@@ -1,3 +1,5 @@
+"use client";
+
 import { baseApi } from "../../../api/baseApi";
 import { TUser, updateUser } from "../auth";
 import { TQueryParams, TResponse } from "../types";
