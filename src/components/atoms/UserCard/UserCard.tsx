@@ -22,7 +22,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           {user.name}
         </Text>
       </div>
-      <FollowButton />
+      <FollowButton userId={user?._id} />
     </div>
   );
 };
