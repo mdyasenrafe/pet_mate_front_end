@@ -32,7 +32,6 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
   if (!currentUser?._id && isMounted && !isLoading) {
     return <AuthPrompt />;
   }
-  console.log(currentUser);
 
   if (!isMounted || isLoading) {
     return <LoadingSpinner />;
