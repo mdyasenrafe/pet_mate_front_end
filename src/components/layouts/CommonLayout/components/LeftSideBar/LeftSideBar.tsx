@@ -3,8 +3,13 @@
 import { Button, Text } from "@/components/atoms";
 import { useModal } from "@/hooks";
 import { useAppDispatch, useAppSelector } from "@/redux";
-import { getCurrentUser, logout } from "@/redux/features/auth";
-import { navItems } from "@/utils";
+import {
+  TUser,
+  getCurrentUser,
+  logout,
+  useCurrentToken,
+} from "@/redux/features/auth";
+import { navItems, commonItems, adminItems } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,22 +17,39 @@ import React, { useEffect, useState } from "react";
 import { LuPlusCircle } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { LogoutModal } from "./components";
+import { verifyToken } from "@/utils/verifyToken";
 
 export const LeftSideBar = () => {
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const currentUser = useAppSelector(getCurrentUser);
-  const profilePath = `/profile/${currentUser?._id}`;
+
+  // hooks
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const currentUser = useAppSelector(getCurrentUser);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const token = useAppSelector(useCurrentToken);
+  let user;
+  let items = navItems;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  const profilePath = `/profile/${currentUser?._id}`;
+
+  if (token) {
+    user = verifyToken(token) as TUser;
+  }
+
+  if (user?.role === "user" && isMounted) {
+    items = [...navItems, ...commonItems];
+  } else if (user?.role == "admin" && isMounted) {
+    items = [...navItems, ...adminItems];
+  }
+
   const handleLogout = () => {
     dispatch(logout());
-    closeModal(); // close the modal after logout
+    closeModal();
   };
 
   return (
@@ -37,7 +59,7 @@ export const LeftSideBar = () => {
           <Image src="/logo.png" width={80} height={80} alt="" />
         </Link>
         <div className="space-y-3">
-          {navItems.map(
+          {items.map(
             ({ id, label, path, icon: Icon, desktop }) =>
               desktop && (
                 <div

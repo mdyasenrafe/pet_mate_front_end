@@ -1,5 +1,12 @@
 import { NavItem } from "@/types";
-import { FaHome, FaBell, FaUser, FaPen, FaStar } from "react-icons/fa";
+import {
+  FaHome,
+  FaBell,
+  FaUser,
+  FaPen,
+  FaStar,
+  FaTachometerAlt,
+} from "react-icons/fa";
 import { LuHome, LuPlusCircle } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 
@@ -32,11 +39,24 @@ export const navItems: NavItem[] = [
     icon: FaStar,
     desktop: true,
   },
+];
+
+export const commonItems = [
   {
     id: 5,
     label: "Profile",
     path: "/profile",
     icon: FaUser,
+    desktop: true,
+  },
+];
+
+export const adminItems = [
+  {
+    id: 6,
+    label: "Dashobard",
+    path: "/dashboard",
+    icon: FaTachometerAlt,
     desktop: true,
   },
 ];
