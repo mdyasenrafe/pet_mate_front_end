@@ -10,9 +10,13 @@ type PostFeedProps = {
 export const PostFeed: React.FC<PostFeedProps> = ({ posts, isAuthor }) => {
   return (
     <div className="grid grid-cols-1 gap-6">
-      {posts?.map((post) => (
-        <Feed key={post._id} post={post} isAuthor={isAuthor || false} />
-      ))}
+      {posts && posts.length > 0 ? (
+        posts.map((post) => (
+          <Feed key={post._id} post={post} isAuthor={isAuthor || false} />
+        ))
+      ) : (
+        <p className="text-center text-gray-500">No posts available.</p>
+      )}
     </div>
   );
 };
