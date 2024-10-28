@@ -1,1 +1,12 @@
-if post details is wrong then show the not found post
+todo:
+1. edit post
+2. premium feature
+3. premium post type
+4. edit profile
+5. other user profile logic
+6. unfollow modal
+7. logout modal
+
+bugs:
+1. if post details is wrong then show the not found post
+2. if user id not found then need to show no data 
