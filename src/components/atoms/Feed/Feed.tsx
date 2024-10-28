@@ -25,7 +25,7 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const handleEdit = useCallback(() => {
-    router.push(`/edit/${post._id}`);
+    router.push(`/edit-post/${post._id}`);
   }, [router, post._id]);
 
   const handleDelete = useCallback(() => {

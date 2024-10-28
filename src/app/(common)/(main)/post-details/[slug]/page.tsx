@@ -40,7 +40,6 @@ const PostPage: React.FC<Props> = ({ params }) => {
       };
       const result = await addComment(commentPayload).unwrap();
       toast.success("Comment added successfully!");
-      console.log(result);
     } catch (error) {
       toast.error("Failed to add comment. Please try again.");
       console.error("Error adding comment:", error);

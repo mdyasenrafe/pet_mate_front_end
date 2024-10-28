@@ -58,10 +58,8 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
     try {
       if (hasUpvoted) {
         await undoVotePost({ postId: post._id, type: "upvote" }).unwrap();
-        console.log("User undid upvote successfully");
       } else {
         await upvotePost(post._id).unwrap();
-        console.log("User upvoted successfully");
       }
     } catch (error) {
       console.error("Failed to handle upvote:", error);
@@ -86,10 +84,8 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
     try {
       if (hasDownvoted) {
         await undoVotePost({ postId: post._id, type: "downvote" }).unwrap();
-        console.log("User undid downvote successfully");
       } else {
         await downvotePost(post._id).unwrap();
-        console.log("User downvoted successfully");
       }
     } catch (error) {
       console.error("Failed to handle downvote:", error);

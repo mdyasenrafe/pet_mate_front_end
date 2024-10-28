@@ -6,3 +6,4 @@ export * from "./Feed";
 export * from "./LoadingSpinner";
 export * from "./PostFeed";
 export * from "./UserCard";
+export * from "./PostForm";

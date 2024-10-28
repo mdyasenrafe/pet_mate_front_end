@@ -58,8 +58,8 @@ export const postsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Post"],
     }),
     updatePost: builder.mutation<TResponse<TPost>, TUpdatePostRequest>({
-      query: ({ postId, ...postData }) => ({
-        url: `/post/${postId}`,
+      query: (postData) => ({
+        url: `/post`,
         method: "PUT",
         body: postData,
       }),

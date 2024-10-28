@@ -34,7 +34,7 @@ export interface TCreatePostRequest {
 }
 
 export interface TUpdatePostRequest {
-  postId: string;
+  _id: string;
   title?: string;
   content?: string;
   category?: "tip" | "story";
@@ -54,4 +54,12 @@ export type TCreateCommentRequest = {
   post: string;
   author: string;
   content: string;
+};
+
+export type TCreatePostValue = {
+  title: string;
+  content: string;
+  category: string;
+  files?: string[];
+  monetization?: boolean;
 };

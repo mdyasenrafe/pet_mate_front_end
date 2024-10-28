@@ -23,7 +23,6 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<TSigninValue> = async (data) => {
     try {
-      console.log("Submitting form...");
       const res = await login(data).unwrap();
       dispatch(addUser({ user: res.data, token: res.token as string }));
       toast.success(res?.message);

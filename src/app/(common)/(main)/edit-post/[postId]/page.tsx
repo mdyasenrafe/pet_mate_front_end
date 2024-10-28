@@ -3,43 +3,63 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
-import { Text, AuthPrompt, Container, PostForm } from "@/components/atoms";
+import {
+  Text,
+  AuthPrompt,
+  Container,
+  PostForm,
+  LoadingSpinner,
+} from "@/components/atoms";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { useFileUploadMutation } from "@/api/updloadApi";
-import { TCreatePostRequest, TFile } from "@/redux/features/post/post.type";
-import { useCreatePostMutation } from "@/redux/features/post/post.api";
+import {
+  TCreatePostRequest,
+  TCreatePostValue,
+  TFile,
+  TPost,
+  TUpdatePostRequest,
+} from "@/redux/features/post/post.type";
+import {
+  useCreatePostMutation,
+  useGetPostDetailsQuery,
+  useUpdatePostMutation,
+} from "@/redux/features/post/post.api";
 import { useRouter } from "next/navigation";
 
-type TCreatePostValue = {
-  title: string;
-  content: string;
-  category: string;
-  files?: string[];
-  monetization?: boolean;
+type Props = {
+  params: {
+    postId: string;
+  };
 };
 
-const CreatePost = () => {
+const EditPost: React.FC<Props> = ({ params }) => {
+  const { postId } = params;
   const currentUser = useAppSelector(getCurrentUser);
   const [isMonetized, setIsMonetized] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
+
+  const { data, isLoading: PostDetailsLoading } =
+    useGetPostDetailsQuery(postId);
   const [fileUpload, { isLoading: isFileUploading }] = useFileUploadMutation();
-  const [createPost, { isLoading }] = useCreatePostMutation();
+  const [updatePost, { isLoading }] = useUpdatePostMutation();
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   const router = useRouter();
 
   if (!currentUser?._id && isMounted) {
     return <AuthPrompt />;
   }
 
-  const onSubmit: SubmitHandler<TCreatePostValue> = async (data) => {
+  const onSubmit: SubmitHandler<TCreatePostValue> = async (formData) => {
     try {
       let uploadedFiles: TFile[] = [];
 
-      if (data.files) {
-        for (const file of data.files) {
+      if (formData.files) {
+        for (const file of formData.files) {
           const fileType = file.split(";")[0].split(":")[1];
           const uploadResult = await fileUpload({ file }).unwrap();
 
@@ -55,12 +75,13 @@ const CreatePost = () => {
       }
 
       const bodyData = {
-        ...data,
+        ...formData,
         files: uploadedFiles,
         monetization: isMonetized,
+        _id: postId,
       };
 
-      const res = await createPost(bodyData as TCreatePostRequest).unwrap();
+      const res = await updatePost(bodyData as TUpdatePostRequest).unwrap();
       toast.success(res?.message || "Post created successfully");
       router.push("/");
     } catch (err: any) {
@@ -72,32 +93,35 @@ const CreatePost = () => {
   return (
     <Container>
       <div className="my-10">
-        <div className="">
+        <div>
           <Text variant="h2" className="mb-6 text-center">
-            Create a New Post
+            Edit Your Post
           </Text>
           <Text
             variant="p4"
             style={{ textAlign: "center", maxWidth: 600, margin: "auto" }}
             className="text-black pb-16"
           >
-            Share your pet care tips or heartwarming stories with the PetMate
-            community. Whether it's advice on pet health, grooming, or just an
-            inspiring tale of your pet's journey, let your voice be heard.
+            Update the details of your pet care tip or story to keep it fresh
+            and relevant for the PetMate community. Share the latest advice,
+            tips, or new insights that will help others care for their pets.
           </Text>
         </div>
-
-        <PostForm
-          isLoading={isFileUploading || isLoading}
-          onSubmit={onSubmit}
-          isUpdate={false}
-          isMonetized={isMonetized}
-          setIsMonetized={setIsMonetized}
-          initialPostValues={{}}
-        />
+        {PostDetailsLoading || !isMounted ? (
+          <LoadingSpinner />
+        ) : (
+          <PostForm
+            isLoading={isFileUploading || isLoading}
+            onSubmit={onSubmit}
+            isUpdate={true}
+            isMonetized={isMonetized}
+            setIsMonetized={setIsMonetized}
+            initialPostValues={data?.data as TPost}
+          />
+        )}
       </div>
     </Container>
   );
 };
 
-export default CreatePost;
+export default EditPost;

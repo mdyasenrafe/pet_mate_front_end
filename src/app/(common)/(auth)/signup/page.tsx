@@ -30,7 +30,6 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<TSignupValue> = async (data) => {
     try {
-      console.log("Submitting signup form...");
       if (data.profilePicture) {
         const thumbRes = await imageUpload({
           file: data.profilePicture,
