@@ -18,21 +18,25 @@ export const UserCard: React.FC<UserCardProps> = ({
   isOwner = true,
 }) => {
   const router = useRouter();
-  const handleRedirctProfile = () => {
+
+  const handleRedirectProfile = () => {
     router.push(`/profile/${user?._id}`);
   };
+
   return (
-    <div
-      className="user-card flex items-center justify-between p-4 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-      onClick={handleRedirctProfile}
-    >
+    <div className="user-card flex items-center justify-between p-4 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-200">
       <div className="flex items-center">
         <img
           src={user.profilePicture || "/default-profile.png"}
           alt={`${user.name}'s profile`}
-          className="w-12 h-12 rounded-full mr-4"
+          className="w-12 h-12 rounded-full mr-4 cursor-pointer"
+          onClick={handleRedirectProfile}
         />
-        <Text variant="h6" className="font-medium text-gray-900">
+        <Text
+          variant="h6"
+          className="font-medium text-gray-900 cursor-pointer"
+          onClick={handleRedirectProfile}
+        >
           {user.name}
         </Text>
       </div>
@@ -40,6 +44,7 @@ export const UserCard: React.FC<UserCardProps> = ({
         userId={user?._id}
         isProfilePage={isProfilePage}
         isOwner={isOwner}
+        username={user.name}
       />
     </div>
   );

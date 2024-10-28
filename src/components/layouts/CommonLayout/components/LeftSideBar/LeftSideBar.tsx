@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Text } from "@/components/atoms";
+import { useModal } from "@/hooks";
 import { useAppDispatch, useAppSelector } from "@/redux";
 import { getCurrentUser, logout } from "@/redux/features/auth";
 import { navItems } from "@/utils";
@@ -10,6 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LuPlusCircle } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
+import { LogoutModal } from "./components";
 
 export const LeftSideBar = () => {
   const router = useRouter();
@@ -17,6 +19,7 @@ export const LeftSideBar = () => {
   const currentUser = useAppSelector(getCurrentUser);
   const profilePath = `/profile/${currentUser?._id}`;
   const dispatch = useAppDispatch();
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
     setIsMounted(true);
@@ -24,6 +27,7 @@ export const LeftSideBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    closeModal(); // close the modal after logout
   };
 
   return (
@@ -41,7 +45,7 @@ export const LeftSideBar = () => {
                   className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105 hover:bg-white/10"
                 >
                   <Link
-                    href={path == "/profile" ? profilePath : path}
+                    href={path === "/profile" ? profilePath : path}
                     className="flex items-center"
                   >
                     <Icon className="text-2xl" color="white" />
@@ -66,7 +70,7 @@ export const LeftSideBar = () => {
         {currentUser?._id && isMounted && (
           <div
             className="fixed bottom-8 flex items-center justify-center space-x-2 cursor-pointer"
-            onClick={handleLogout}
+            onClick={openModal} // open the modal when clicked
           >
             <MdLogout className="text-2xl text-white" />
             <Text variant="p3" className="text-white">
@@ -75,6 +79,12 @@ export const LeftSideBar = () => {
           </div>
         )}
       </nav>
+
+      <LogoutModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        onConfirmLogout={handleLogout}
+      />
     </aside>
   );
 };
