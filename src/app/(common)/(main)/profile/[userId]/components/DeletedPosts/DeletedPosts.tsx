@@ -1,14 +1,21 @@
 "use client";
 import { LoadingSpinner, PostFeed } from "@/components/atoms";
-import { TPost, useGetMyPostsQuery } from "@/redux/features/post";
+import { TPost, useGetPostByUserIdQuery } from "@/redux/features/post";
 import React from "react";
 
-export const DeletedPosts = () => {
+type DeletedPostProps = {
+  userId: string;
+};
+
+export const DeletedPosts: React.FC<DeletedPostProps> = ({ userId }) => {
   const {
     data: MyPosts,
     isLoading,
     isFetching,
-  } = useGetMyPostsQuery([{ name: "status", value: "deleted" }]);
+  } = useGetPostByUserIdQuery({
+    userId: userId,
+    params: [{ name: "status", value: "deleted" }],
+  });
 
   if (isLoading || isFetching) {
     return <LoadingSpinner />;

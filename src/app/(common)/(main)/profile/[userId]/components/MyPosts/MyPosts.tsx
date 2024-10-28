@@ -1,14 +1,21 @@
 "use client";
 import { LoadingSpinner, PostFeed } from "@/components/atoms";
-import { TPost, useGetMyPostsQuery } from "@/redux/features/post";
+import { TPost, useGetPostByUserIdQuery } from "@/redux/features/post";
 import React from "react";
 
-export const MyPosts = () => {
+type MyPostsProps = {
+  userId: string;
+};
+
+export const MyPosts: React.FC<MyPostsProps> = ({ userId }) => {
   const {
     data: MyPosts,
     isLoading,
     isFetching,
-  } = useGetMyPostsQuery([{ name: "status", value: "published" }]);
+  } = useGetPostByUserIdQuery({
+    userId: userId,
+    params: [{ name: "status", value: "published" }],
+  });
 
   if (isLoading || isFetching) {
     return <LoadingSpinner />;

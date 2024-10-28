@@ -4,6 +4,7 @@ import React from "react";
 import { Text } from "@/components/atoms";
 import { TUser } from "@/redux/features/auth";
 import { FollowButton } from "./components";
+import { useRouter } from "next/navigation";
 
 type UserCardProps = {
   user: TUser;
@@ -11,8 +12,15 @@ type UserCardProps = {
 };
 
 export const UserCard: React.FC<UserCardProps> = ({ user, isProfilePage }) => {
+  const router = useRouter();
+  const handleRedirctProfile = () => {
+    router.push(`/profile/${user?._id}`);
+  };
   return (
-    <div className="user-card flex items-center justify-between p-4 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-200">
+    <div
+      className="user-card flex items-center justify-between p-4 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+      onClick={handleRedirctProfile}
+    >
       <div className="flex items-center">
         <img
           src={user.profilePicture || "/default-profile.png"}

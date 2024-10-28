@@ -47,15 +47,15 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "posts":
-        return <MyPosts />;
+        return <MyPosts userId={params?.userId} />;
       case "followers":
         return <FollowersList followers={currentUser?.followers || []} />;
       case "following":
         return <FollowingList following={currentUser?.following || []} />;
       case "deleted":
-        return <DeletedPosts />;
+        return <DeletedPosts userId={params?.userId} />;
       default:
-        return <MyPosts />;
+        return <MyPosts userId={params?.userId} />;
     }
   };
 

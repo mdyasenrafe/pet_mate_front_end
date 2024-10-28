@@ -1,4 +1,5 @@
 import { TUser } from "../auth";
+import { TQueryParams } from "../types";
 
 export type TFile = {
   url: string;
@@ -62,4 +63,9 @@ export type TCreatePostValue = {
   category: string;
   files?: string[];
   monetization?: boolean;
+};
+
+export type TReqGetPostByUserId = {
+  userId: string;
+  params: TQueryParams[];
 };

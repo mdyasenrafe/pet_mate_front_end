@@ -3,22 +3,23 @@ import {
   TCreateCommentRequest,
   TCreatePostRequest,
   TPost,
+  TReqGetPostByUserId,
   TUpdatePostRequest,
 } from "./post.type";
 import { TQueryParams, TResponse } from "../types";
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMyPosts: builder.query<TResponse<TPost[]>, TQueryParams[]>({
+    getPostByUserId: builder.query<TResponse<TPost[]>, TReqGetPostByUserId>({
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {
-          args.forEach((item: TQueryParams) => {
+          args.params.forEach((item: TQueryParams) => {
             params.append(item.name, item.value as string);
           });
         }
 
-        return { url: "/post/my-posts", params: params };
+        return { url: `/post/my-posts/${args.userId}`, params: params };
       },
       providesTags: ["Post"],
     }),
@@ -84,6 +85,7 @@ export const postsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+
     undoVotePost: builder.mutation<
       TResponse<TPost>,
       { postId: string; type: string }
@@ -123,5 +125,5 @@ export const {
   useUndoVotePostMutation,
   useGetPostDetailsQuery,
   useAddCommentMutation,
-  useGetMyPostsQuery,
+  useGetPostByUserIdQuery,
 } = postsApi;
