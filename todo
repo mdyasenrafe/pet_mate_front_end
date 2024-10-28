@@ -1,10 +1,12 @@
 todo:
-2. premium feature
-3. premium post type
-4. edit profile
-5. other user profile logic
-6. unfollow modal
-7. logout modal
+Premium feature
+Premium post type
+Edit profile
+Unfollow modal
+Logout modal
+Reset password
+Change password
+
 
 bugs:
 1. if post details is wrong then show the not found post
