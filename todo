@@ -1,5 +1,4 @@
 todo:
-1. edit post
 2. premium feature
 3. premium post type
 4. edit profile
@@ -10,3 +9,4 @@ todo:
 bugs:
 1. if post details is wrong then show the not found post
 2. if user id not found then need to show no data 
+3. user edit post picture not working
