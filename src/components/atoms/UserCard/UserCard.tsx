@@ -9,9 +9,14 @@ import { useRouter } from "next/navigation";
 type UserCardProps = {
   user: TUser;
   isProfilePage?: boolean;
+  isOwner?: boolean;
 };
 
-export const UserCard: React.FC<UserCardProps> = ({ user, isProfilePage }) => {
+export const UserCard: React.FC<UserCardProps> = ({
+  user,
+  isProfilePage,
+  isOwner = true,
+}) => {
   const router = useRouter();
   const handleRedirctProfile = () => {
     router.push(`/profile/${user?._id}`);
@@ -31,7 +36,11 @@ export const UserCard: React.FC<UserCardProps> = ({ user, isProfilePage }) => {
           {user.name}
         </Text>
       </div>
-      <FollowButton userId={user?._id} isProfilePage={isProfilePage} />
+      <FollowButton
+        userId={user?._id}
+        isProfilePage={isProfilePage}
+        isOwner={isOwner}
+      />
     </div>
   );
 };

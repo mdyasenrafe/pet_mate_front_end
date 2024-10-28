@@ -5,9 +5,10 @@ import React from "react";
 
 type MyPostsProps = {
   userId: string;
+  isOwner: boolean;
 };
 
-export const MyPosts: React.FC<MyPostsProps> = ({ userId }) => {
+export const MyPosts: React.FC<MyPostsProps> = ({ userId, isOwner }) => {
   const {
     data: MyPosts,
     isLoading,
@@ -22,7 +23,10 @@ export const MyPosts: React.FC<MyPostsProps> = ({ userId }) => {
   }
   return (
     <div className="mb-10">
-      <PostFeed posts={MyPosts?.data as TPost[]} isAuthor={true} />
+      <PostFeed
+        posts={MyPosts?.data as TPost[]}
+        isAuthor={isOwner ? true : false}
+      />
     </div>
   );
 };

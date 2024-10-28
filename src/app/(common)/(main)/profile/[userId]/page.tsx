@@ -11,6 +11,8 @@ import {
   MyPosts,
 } from "./components";
 import { useMeQuery } from "@/redux/features/users";
+import { useAppSelector } from "@/redux";
+import { getCurrentUser } from "@/redux/features/auth";
 
 type Props = {
   params: {
@@ -21,13 +23,21 @@ type Props = {
 const ProfilePage: React.FC<Props> = ({ params }) => {
   const { data, isLoading } = useMeQuery(params?.userId as string);
   const currentUser = data?.data;
+  const loggedInUser = useAppSelector(getCurrentUser);
 
   const [isMounted, setIsMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+
+    if (loggedInUser?._id === currentUser?._id) {
+      setIsOwner(true);
+    } else {
+      setIsOwner(false);
+    }
+  }, [loggedInUser, currentUser]);
 
   if (!currentUser?._id && isMounted && !isLoading) {
     return <AuthPrompt />;
@@ -41,21 +51,31 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
     { label: "My Posts", value: "posts" },
     { label: "Followers", value: "followers" },
     { label: "Following", value: "following" },
-    { label: "Deleted Posts", value: "deleted" },
+    ...(isOwner ? [{ label: "Deleted Posts", value: "deleted" }] : []),
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "posts":
-        return <MyPosts userId={params?.userId} />;
+        return <MyPosts userId={params?.userId} isOwner={isOwner} />;
       case "followers":
-        return <FollowersList followers={currentUser?.followers || []} />;
+        return (
+          <FollowersList
+            followers={currentUser?.followers || []}
+            isOwner={isOwner}
+          />
+        );
       case "following":
-        return <FollowingList following={currentUser?.following || []} />;
+        return (
+          <FollowingList
+            following={currentUser?.following || []}
+            isOwner={isOwner}
+          />
+        );
       case "deleted":
         return <DeletedPosts userId={params?.userId} />;
       default:
-        return <MyPosts userId={params?.userId} />;
+        return <MyPosts userId={params?.userId} isOwner={isOwner} />;
     }
   };
 
@@ -82,14 +102,16 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
             )}
           </div>
         </div>
-        <Button
-          icon={<FiEdit />}
-          iconPosition="start"
-          customColor="primary"
-          className="h-10 px-4 text-sm"
-        >
-          Edit Profile
-        </Button>
+        {isOwner && (
+          <Button
+            icon={<FiEdit />}
+            iconPosition="start"
+            customColor="primary"
+            className="h-10 px-4 text-sm"
+          >
+            Edit Profile
+          </Button>
+        )}
       </div>
       <hr />
 

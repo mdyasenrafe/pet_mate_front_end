@@ -11,11 +11,13 @@ import { getCurrentUser } from "@/redux/features/auth";
 type FollowButtonProps = {
   userId: string;
   isProfilePage?: boolean;
+  isOwner?: boolean;
 };
 
 export const FollowButton: React.FC<FollowButtonProps> = ({
   userId,
   isProfilePage = false,
+  isOwner = true,
 }) => {
   const currentUser = useAppSelector(getCurrentUser);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -60,22 +62,24 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
   };
 
   return (
-    <Button
-      customColor="primary"
-      className="px-5 py-2 rounded-full text-sm font-semibold bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 transition-all duration-150"
-      onClick={handleFollowClick}
-      disabled={isFollowLoading || isUnfollowLoading}
-      loading={isFollowLoading || isUnfollowLoading}
-    >
-      {isProfilePage && isFollowing
-        ? "Remove"
-        : isFollowing
-        ? "Following"
-        : isProfilePage && isFollower
-        ? "Remove"
-        : isFollower
-        ? "Follow Back"
-        : "Follow"}
-    </Button>
+    isOwner && (
+      <Button
+        customColor="primary"
+        className="px-5 py-2 rounded-full text-sm font-semibold bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 transition-all duration-150"
+        onClick={handleFollowClick}
+        disabled={isFollowLoading || isUnfollowLoading}
+        loading={isFollowLoading || isUnfollowLoading}
+      >
+        {isProfilePage && isFollowing
+          ? "Remove"
+          : isFollowing
+          ? "Following"
+          : isProfilePage && isFollower
+          ? "Remove"
+          : isFollower
+          ? "Follow Back"
+          : "Follow"}
+      </Button>
+    )
   );
 };
