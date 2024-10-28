@@ -81,8 +81,7 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
 
   return (
     <section className="mx-0 lg:mx-6 mt-10">
-      {/* Profile Header */}
-      <div className="flex justify-between items-center pb-4">
+      <div className="lg:flex justify-between items-center pb-4">
         <div className="flex items-center space-x-4">
           <div className="h-24 w-24 rounded-full overflow-hidden">
             <img
@@ -107,7 +106,7 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
             icon={<FiEdit />}
             iconPosition="start"
             customColor="primary"
-            className="h-10 px-4 text-sm"
+            className="h-10 px-4 text-sm mt-4 lg:mt-0"
           >
             Edit Profile
           </Button>
