@@ -7,9 +7,9 @@ import { TUpdateValue } from "./types";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    me: builder.query<TResponse<TUser>, undefined>({
-      query: () => {
-        return { url: "/users/me" };
+    me: builder.query<TResponse<TUser>, string>({
+      query: (userId: string) => {
+        return { url: `/users/me/${userId}` };
       },
     }),
 

@@ -1,7 +1,6 @@
 "use client";
+
 import { AuthPrompt, Button, LoadingSpinner, Text } from "@/components/atoms";
-import { useAppSelector } from "@/redux";
-import { getCurrentUser } from "@/redux/features/auth";
 import { formatRelativeTime } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
@@ -11,9 +10,18 @@ import {
   FollowingList,
   MyPosts,
 } from "./components";
+import { useMeQuery } from "@/redux/features/users";
 
-const ProfilePage = () => {
-  const currentUser = useAppSelector(getCurrentUser);
+type Props = {
+  params: {
+    userId: string;
+  };
+};
+
+const ProfilePage: React.FC<Props> = ({ params }) => {
+  const { data, isLoading } = useMeQuery(params?.userId as string);
+  const currentUser = data?.data;
+
   const [isMounted, setIsMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -21,11 +29,12 @@ const ProfilePage = () => {
     setIsMounted(true);
   }, []);
 
-  if (!currentUser?._id && isMounted) {
+  if (!currentUser?._id && isMounted && !isLoading) {
     return <AuthPrompt />;
   }
+  console.log(currentUser);
 
-  if (!isMounted) {
+  if (!isMounted || isLoading) {
     return <LoadingSpinner />;
   }
 

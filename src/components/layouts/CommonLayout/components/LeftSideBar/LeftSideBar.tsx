@@ -15,6 +15,7 @@ export const LeftSideBar = () => {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const currentUser = useAppSelector(getCurrentUser);
+  const profilePath = `/profile/${currentUser?._id}`;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -39,7 +40,10 @@ export const LeftSideBar = () => {
                   key={id}
                   className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105 hover:bg-white/10"
                 >
-                  <Link href={path} className="flex items-center">
+                  <Link
+                    href={path == "/profile" ? profilePath : path}
+                    className="flex items-center"
+                  >
                     <Icon className="text-2xl" color="white" />
                     <Text variant="p3" className="ml-2 text-white">
                       {label}
