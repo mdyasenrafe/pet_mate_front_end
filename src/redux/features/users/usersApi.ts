@@ -11,6 +11,7 @@ const userApi = baseApi.injectEndpoints({
       query: (userId: string) => {
         return { url: `/users/me/${userId}` };
       },
+      providesTags: ["User"],
     }),
 
     getAllUsers: builder.query<TResponse<TUser[]>, TQueryParams[]>({
@@ -57,6 +58,7 @@ const userApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["User"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;

@@ -21,7 +21,7 @@ export const postsApi = baseApi.injectEndpoints({
 
         return { url: `/post/my-posts/${args.userId}`, params: params };
       },
-      providesTags: ["Post"],
+      providesTags: ["Post", "User"],
     }),
     getRandomPosts: builder.query<TResponse<TPost[]>, TQueryParams[]>({
       query: (args) => {

@@ -9,10 +9,12 @@ import {
   FollowersList,
   FollowingList,
   MyPosts,
+  EditProfileModal,
 } from "./components";
 import { useMeQuery } from "@/redux/features/users";
 import { useAppSelector } from "@/redux";
-import { getCurrentUser } from "@/redux/features/auth";
+import { TUser, getCurrentUser } from "@/redux/features/auth";
+import { useModal } from "@/hooks";
 
 type Props = {
   params: {
@@ -21,7 +23,9 @@ type Props = {
 };
 
 const ProfilePage: React.FC<Props> = ({ params }) => {
-  const { data, isLoading } = useMeQuery(params?.userId as string);
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const { data, isLoading, isFetching } = useMeQuery(params?.userId as string);
   const currentUser = data?.data;
   const loggedInUser = useAppSelector(getCurrentUser);
 
@@ -43,7 +47,7 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
     return <AuthPrompt />;
   }
 
-  if (!isMounted || isLoading) {
+  if (!isMounted || isLoading || isFetching) {
     return <LoadingSpinner />;
   }
 
@@ -107,6 +111,7 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
             iconPosition="start"
             customColor="primary"
             className="h-10 px-4 text-sm mt-4 lg:mt-0"
+            onClick={() => openModal()}
           >
             Edit Profile
           </Button>
@@ -114,7 +119,6 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
       </div>
       <hr />
 
-      {/* Tabs Navigation */}
       <div className="mt-4 flex space-x-4 border-b border-gray-200">
         {tabs.map((tab) => (
           <div
@@ -130,6 +134,11 @@ const ProfilePage: React.FC<Props> = ({ params }) => {
           </div>
         ))}
       </div>
+      <EditProfileModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        loggedInUser={currentUser as TUser}
+      />
 
       <div className="mt-6 p-4 bg-white shadow rounded-lg">
         {renderTabContent()}
