@@ -117,21 +117,9 @@ input:focus {
   font-size: 24px !important;
 }
 
-/* SearchPage.module.css */
-.tabButton {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.ant-table-cell {
+  font-family: "Poppins", sans-serif !important;
 }
-
-.tabButtonActive {
-  background-color: #8bc34a; /* Active color */
-  color: white;
-}
-
-.tabButtonInactive {
-  background-color: #d1c4e9; /* Inactive color */
-  color: #555;
+.ant-layout-sider-zero-width-trigger {
+  top: 8px !important;
 }

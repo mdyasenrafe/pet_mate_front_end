@@ -92,7 +92,7 @@ export const LeftSideBar = () => {
         {currentUser?._id && isMounted && (
           <div
             className="fixed bottom-8 flex items-center justify-center space-x-2 cursor-pointer"
-            onClick={openModal} // open the modal when clicked
+            onClick={openModal}
           >
             <MdLogout className="text-2xl text-white" />
             <Text variant="p3" className="text-white">
