@@ -1,12 +1,5 @@
 import { NavItem } from "@/types";
-import {
-  FaHome,
-  FaBell,
-  FaUser,
-  FaPen,
-  FaStar,
-  FaTachometerAlt,
-} from "react-icons/fa";
+import { FaUser, FaPen, FaStar, FaTachometerAlt } from "react-icons/fa";
 import { LuHome, LuPlusCircle } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 

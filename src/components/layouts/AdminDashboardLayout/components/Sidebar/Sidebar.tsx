@@ -1,13 +1,13 @@
 "use client";
 
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import { useAppSelector } from "@/redux";
 import { TUser, useCurrentToken } from "@/redux/features/auth";
 import { adminRoutes, verifyToken } from "@/utils";
 import Link from "next/link";
 import { LoadingSpinner, Text } from "@/components/atoms";
 import { FaPaw } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const { Sider } = Layout;
 
@@ -18,6 +18,7 @@ const userRole = {
 export const Sidebar = () => {
   const token = useAppSelector(useCurrentToken);
   const [isMounted, setIsMounted] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   let user;
   let sidebarItems;
 
@@ -47,14 +48,16 @@ export const Sidebar = () => {
 
   return (
     <Sider
+      collapsible
       breakpoint="lg"
-      collapsedWidth="0"
       style={{
         height: "100vh",
         position: "sticky",
         top: 0,
         left: 0,
       }}
+      collapsed={collapsed}
+      onCollapse={(collapsed) => setCollapsed(collapsed)}
     >
       <div
         style={{
@@ -68,15 +71,18 @@ export const Sidebar = () => {
         <FaPaw className="text-5xl text-white" />
       </div>
       <div className="space-y-3">
-        {sidebarItems.map(({ id, name, path }) => (
+        {sidebarItems.map(({ id, name, path, icon: Icon }) => (
           <div
             key={id}
-            className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105 hover:bg-white/10"
+            className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105"
           >
             <Link href={path} className="flex items-center">
-              <Text variant="p5" className="ml-2 text-white">
-                {name}
-              </Text>
+              <Icon className="text-xl" color="white" />
+              {!collapsed && (
+                <Text variant="p5" className="ml-3 text-white">
+                  {name}
+                </Text>
+              )}
             </Link>
           </div>
         ))}

@@ -120,6 +120,8 @@ input:focus {
 .ant-table-cell {
   font-family: "Poppins", sans-serif !important;
 }
-.ant-layout-sider-zero-width-trigger {
+
+.ant-layout-sider-trigger {
   top: 8px !important;
+  background: #001529 !important;
 }
