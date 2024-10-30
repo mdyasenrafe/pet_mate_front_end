@@ -22,7 +22,7 @@ const userApi = baseApi.injectEndpoints({
             params.append(item.name, item.value as string);
           });
         }
-        return { url: "/users", params: params };
+        return { url: "/users/all-users", params: params };
       },
       providesTags: ["Users"],
     }),
