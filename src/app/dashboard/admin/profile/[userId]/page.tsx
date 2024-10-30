@@ -1,3 +1,4 @@
+import { Container } from "@/components/atoms";
 import { UserProfile } from "@/components/molecules";
 
 type ProfilePageProps = {
@@ -7,7 +8,11 @@ type ProfilePageProps = {
 };
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
-  return <UserProfile userId={params.userId} />;
+  return (
+    <Container>
+      <UserProfile userId={params.userId} />
+    </Container>
+  );
 };
 
 export default ProfilePage;
