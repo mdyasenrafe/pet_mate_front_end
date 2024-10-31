@@ -63,7 +63,7 @@ export const PostTable: React.FC<PostTableProps> = ({
       dataIndex: "category",
       key: "category",
       filters: categoryFilters,
-      onFilter: (value: any, record: any) => record.category === value,
+      onFilter: (value: any, record: TPost) => record.category === value,
       render: (text: string) => <Text>{text}</Text>,
     },
     {
@@ -77,7 +77,7 @@ export const PostTable: React.FC<PostTableProps> = ({
       dataIndex: "status",
       key: "status",
       filters: statusFilters,
-      onFilter: (value: any, record: any) => record.status === value,
+      onFilter: (value: any, record: TPost) => record.status === value,
       render: (status: string) => (
         <Text color={status === "published" ? "green" : "red"}>{status}</Text>
       ),
@@ -91,8 +91,9 @@ export const PostTable: React.FC<PostTableProps> = ({
             View Details
           </Button>
           <Button
-            customColor="red"
+            customColor={record.status !== "deleted" ? "red" : "grey"}
             onClick={() => handleDeleteClick(record._id)}
+            disabled={record.status === "deleted"}
           >
             Delete
           </Button>
