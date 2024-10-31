@@ -36,6 +36,7 @@ export const LeftSideBar = () => {
   }, []);
 
   const profilePath = `/profile/${currentUser?._id}`;
+  const adminPath = `/dashboard/admin/profile/${currentUser?._id}`;
 
   if (token) {
     user = verifyToken(token) as TUser;
@@ -67,7 +68,13 @@ export const LeftSideBar = () => {
                   className="flex items-center space-x-2 rounded-full cursor-pointer p-3 transition-transform transform hover:scale-105 hover:bg-white/10"
                 >
                   <Link
-                    href={path === "/profile" ? profilePath : path}
+                    href={
+                      path === "/profile"
+                        ? profilePath
+                        : path == "/admin/profile"
+                        ? adminPath
+                        : path
+                    }
                     className="flex items-center"
                   >
                     <Icon className="text-2xl" color="white" />

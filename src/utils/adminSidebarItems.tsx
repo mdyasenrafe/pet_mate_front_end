@@ -4,8 +4,8 @@ import { FaUserCircle, FaClipboardList, FaUsers } from "react-icons/fa";
 export const adminRoutes = [
   {
     id: 6.1,
-    name: "Dashboard",
-    path: "/dashboard/admin",
+    name: "Home",
+    path: "/",
     icon: MdDashboard,
   },
   {

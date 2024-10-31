@@ -48,7 +48,7 @@ export const adminItems = [
   {
     id: 6,
     label: "Dashobard",
-    path: "/dashboard",
+    path: "/admin/profile",
     icon: FaTachometerAlt,
     desktop: true,
   },

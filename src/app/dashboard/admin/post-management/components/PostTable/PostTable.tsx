@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Table, Space } from "antd";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/atoms/Button";
 import { Text } from "@/components/atoms/Text";
 import { TPost } from "@/redux/features/post";
@@ -23,7 +22,6 @@ export const PostTable: React.FC<PostTableProps> = ({
   onTableChange,
   isLoading,
 }) => {
-  const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [deletePost] = useDeletePostMutation();
@@ -87,7 +85,9 @@ export const PostTable: React.FC<PostTableProps> = ({
       key: "actions",
       render: (_: any, record: TPost) => (
         <Space size="middle">
-          <Button onClick={() => router.push(`/post-details/${record._id}`)}>
+          <Button
+            onClick={() => window.open(`/post-details/${record._id}`, "_blank")}
+          >
             View Details
           </Button>
           <Button
