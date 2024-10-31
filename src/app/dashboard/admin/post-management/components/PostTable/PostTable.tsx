@@ -1,4 +1,3 @@
-// PostTable.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -13,16 +12,16 @@ import { DeleteConfirmationModal } from "./components";
 
 type PostTableProps = {
   posts: TPost[];
-  onDelete: (id: string) => void;
   meta?: any;
-  onTableChange: (pagination: any) => void;
+  onTableChange: (pagination: any, filters: any) => void;
+  isLoading: boolean;
 };
 
 export const PostTable: React.FC<PostTableProps> = ({
   posts,
-  onDelete,
   meta,
   onTableChange,
+  isLoading,
 }) => {
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -36,11 +35,21 @@ export const PostTable: React.FC<PostTableProps> = ({
 
   const confirmDelete = async () => {
     if (selectedPostId) {
-      await deletePost(selectedPostId); // Call the delete mutation
+      await deletePost(selectedPostId);
       closeModal();
       setSelectedPostId(null);
     }
   };
+
+  const statusFilters = [
+    { text: "Published", value: "published" },
+    { text: "Deleted", value: "deleted" },
+  ];
+
+  const categoryFilters = [
+    { text: "Story", value: "story" },
+    { text: "Tip", value: "tip" },
+  ];
 
   const columns = [
     {
@@ -53,6 +62,8 @@ export const PostTable: React.FC<PostTableProps> = ({
       title: "Category",
       dataIndex: "category",
       key: "category",
+      filters: categoryFilters,
+      onFilter: (value: any, record: any) => record.category === value,
       render: (text: string) => <Text>{text}</Text>,
     },
     {
@@ -65,6 +76,8 @@ export const PostTable: React.FC<PostTableProps> = ({
       title: "Status",
       dataIndex: "status",
       key: "status",
+      filters: statusFilters,
+      onFilter: (value: any, record: any) => record.status === value,
       render: (status: string) => (
         <Text color={status === "published" ? "green" : "red"}>{status}</Text>
       ),
@@ -101,7 +114,8 @@ export const PostTable: React.FC<PostTableProps> = ({
           showSizeChanger: true,
           pageSizeOptions: ["10", "20", "50", "100"],
         }}
-        onChange={onTableChange}
+        onChange={(pagination, filters) => onTableChange(pagination, filters)}
+        loading={isLoading}
       />
 
       <DeleteConfirmationModal
@@ -115,3 +129,5 @@ export const PostTable: React.FC<PostTableProps> = ({
     </>
   );
 };
+
+export default PostTable;
