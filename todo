@@ -10,3 +10,4 @@ bugs:
 1. if post details is wrong then show the not found post
 2. if user id not found then need to show no data 
 3. user edit post picture not working
+4. without logged in user can't click upvote and downvote
