@@ -19,7 +19,13 @@ type TempParamsType = {
   monetization?: string;
 };
 
-export const PostFeedSection = () => {
+type PostFeedSectionProps = {
+  isAdmin?: boolean;
+};
+
+export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
+  isAdmin,
+}) => {
   const currentUser = useAppSelector(getCurrentUser);
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -115,7 +121,7 @@ export const PostFeedSection = () => {
       ) : (
         <div>
           {posts?.data?.length !== 0 ? (
-            <PostFeed posts={posts?.data as TPost[]} />
+            <PostFeed posts={posts?.data as TPost[]} isAdmin={isAdmin} />
           ) : (
             <Text variant="p3" className="text-center text-gray-500">
               No posts found matching your criteria.

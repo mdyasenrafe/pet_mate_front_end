@@ -18,9 +18,10 @@ import { Modal } from "@/components";
 type FeedProps = {
   post: TPost;
   isAuthor: boolean;
+  isAdmin?: boolean;
 };
 
-export const Feed: React.FC<FeedProps> = ({ post, isAuthor }) => {
+export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -104,7 +105,7 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor }) => {
         </div>
 
         <FeedFiles files={post.files} />
-        <FeedBottom post={post} />
+        {!isAdmin && <FeedBottom post={post} />}
       </Card>
 
       {isModalOpen && (
