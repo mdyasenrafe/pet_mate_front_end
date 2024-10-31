@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Button, LoadingSpinner, PostFeed } from "@/components/atoms";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
 import { useModal } from "@/hooks";
 import { TPost, useGetPostsQuery } from "@/redux/features/post";
 import { FilterModal, SearchBar, SortSelect } from "./components";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 type ParamsType = {
   name: string;
@@ -29,8 +30,11 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
   const currentUser = useAppSelector(getCurrentUser);
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  const [page, setPage] = useState(1);
+  const [allPosts, setAllPosts] = useState<TPost[]>([]);
+  const [hasMore, setHasMore] = useState(true);
   const [params, setParams] = useState<ParamsType[]>([
-    { name: "limit", value: 10 },
+    { name: "limit", value: 5 },
     { name: "status", value: "published" },
     { name: "sort", value: "-createdAt" },
   ]);
@@ -42,9 +46,22 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
     data: posts,
     isLoading,
     isFetching,
-  } = useGetPostsQuery(params, {
+  } = useGetPostsQuery([...params, { name: "page", value: page }], {
     skip: !currentUser?._id,
   });
+
+  useEffect(() => {
+    if (posts?.data) {
+      setAllPosts((prevPosts) => [...prevPosts, ...posts.data]);
+      if (posts.data.length === 0 || posts.data.length < 5) {
+        setHasMore(false);
+      }
+    }
+  }, [posts]);
+
+  const fetchMorePosts = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   const handleSortChange = (value: string) => {
     setParams((prevParams) =>
@@ -52,6 +69,9 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
         param.name === "sort" ? { ...param, value } : param
       )
     );
+    setPage(1);
+    setAllPosts([]);
+    setHasMore(true);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +100,9 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
       newParams.push({ name: "monetization", value: tempParams.monetization });
     }
     setParams(newParams);
+    setPage(1);
+    setAllPosts([]);
+    setHasMore(true);
     closeModal();
   };
 
@@ -87,10 +110,13 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
     setTempParams({});
     setSearchKeyword("");
     setParams([
-      { name: "limit", value: 10 },
+      { name: "limit", value: 5 },
       { name: "status", value: "published" },
       { name: "sort", value: "-createdAt" },
     ]);
+    setPage(1);
+    setAllPosts([]);
+    setHasMore(true);
   };
 
   const handleSearch = (value: string) => {
@@ -98,6 +124,9 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
       const filteredParams = prevParams.filter((p) => p.name !== "searchTerm");
       return [...filteredParams, { name: "searchTerm", value }];
     });
+    setPage(1);
+    setAllPosts([]);
+    setHasMore(true);
   };
 
   return (
@@ -116,19 +145,25 @@ export const PostFeedSection: React.FC<PostFeedSectionProps> = ({
         <SortSelect handleSortChange={handleSortChange} />
       </div>
 
-      {isLoading || isFetching ? (
-        <LoadingSpinner />
-      ) : (
+      <InfiniteScroll
+        dataLength={allPosts.length}
+        next={fetchMorePosts}
+        hasMore={hasMore}
+        loader={<LoadingSpinner />}
+        endMessage={<></>}
+      >
         <div>
-          {posts?.data?.length !== 0 ? (
-            <PostFeed posts={posts?.data as TPost[]} isAdmin={isAdmin} />
+          {allPosts.length !== 0 ? (
+            <PostFeed posts={allPosts} isAdmin={isAdmin} />
           ) : (
-            <Text variant="p3" className="text-center text-gray-500">
-              No posts found matching your criteria.
-            </Text>
+            !isLoading && (
+              <Text variant="p3" className="text-center text-gray-500">
+                No posts found matching your criteria.
+              </Text>
+            )
           )}
         </div>
-      )}
+      </InfiniteScroll>
 
       <FilterModal
         isModalOpen={isModalOpen}

@@ -1,10 +1,11 @@
 "use client";
 
 import { useGetUsersQuery } from "@/redux/features/users";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SearchBar } from "../PostFeedSection/components";
 import { LoadingSpinner, Text, UserCard } from "@/components/atoms";
 import { TUser } from "@/redux/features/auth";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 type ParamsType = {
   name: string;
@@ -17,8 +18,31 @@ export const PeopleFeedSection = () => {
     { name: "sort", value: "-createdAt" },
   ]);
 
+  const [page, setPage] = useState(1);
+  const [allUsers, setAllUsers] = useState<TUser[]>([]);
+  const [hasMore, setHasMore] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const { data: users, isLoading, isFetching } = useGetUsersQuery(params);
+
+  const {
+    data: usersData,
+    isLoading,
+    isFetching,
+  } = useGetUsersQuery([...params, { name: "page", value: page }], {
+    skip: !page,
+  });
+
+  useEffect(() => {
+    if (usersData?.data) {
+      setAllUsers((prevUsers) => [...prevUsers, ...usersData.data]);
+      if (usersData.data.length === 0 || usersData.data.length < 10) {
+        setHasMore(false);
+      }
+    }
+  }, [usersData]);
+
+  const fetchMoreUsers = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
@@ -29,6 +53,9 @@ export const PeopleFeedSection = () => {
       const filteredParams = prevParams.filter((p) => p.name !== "searchTerm");
       return [...filteredParams, { name: "searchTerm", value }];
     });
+    setPage(1);
+    setAllUsers([]);
+    setHasMore(true);
   };
 
   return (
@@ -37,14 +64,19 @@ export const PeopleFeedSection = () => {
         searchKeyword={searchKeyword}
         handleSearchChange={handleSearchChange}
         handleSearch={handleSearch}
-        placeholder={"Search by people name"}
+        placeholder="Search by people name"
       />
-      {isLoading || isFetching ? (
-        <LoadingSpinner />
-      ) : (
+
+      <InfiniteScroll
+        dataLength={allUsers.length}
+        next={fetchMoreUsers}
+        hasMore={hasMore}
+        loader={<LoadingSpinner />}
+        endMessage={<></>}
+      >
         <div className="user-list mt-4 space-y-4">
-          {users?.data?.length ? (
-            users?.data?.map((user: TUser) => (
+          {allUsers.length ? (
+            allUsers.map((user: TUser) => (
               <UserCard key={user._id} user={user} />
             ))
           ) : (
@@ -53,7 +85,7 @@ export const PeopleFeedSection = () => {
             </Text>
           )}
         </div>
-      )}
+      </InfiniteScroll>
     </div>
   );
 };
