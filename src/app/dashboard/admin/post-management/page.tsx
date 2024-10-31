@@ -55,14 +55,13 @@ const Page = () => {
         title="Post Management"
         description="Manage all posts shared within the PetMate community. Here you can review, edit, or remove pet care tips and heartwarming stories to ensure a safe and informative experience for all pet lovers."
       />
-      {postsData && (
-        <PostTable
-          posts={postsData.data as TPost[]}
-          meta={postsData?.meta}
-          onTableChange={handleTableChange}
-          isLoading={isLoading || isFetching}
-        />
-      )}
+
+      <PostTable
+        posts={postsData?.data as TPost[]}
+        meta={postsData?.meta}
+        onTableChange={handleTableChange}
+        isLoading={isLoading || isFetching}
+      />
     </Container>
   );
 };
