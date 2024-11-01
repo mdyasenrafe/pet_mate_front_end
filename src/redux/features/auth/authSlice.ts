@@ -24,10 +24,16 @@ const authSlice = createSlice({
     updateUser: (state, action: PayloadAction<TUser>) => {
       state.user = action.payload;
     },
+    setPremiumStatus: (state) => {
+      if (state.user) {
+        state.user.isPremium = true;
+      }
+    },
   },
 });
 
-export const { addUser, logout, updateUser } = authSlice.actions;
+export const { addUser, logout, updateUser, setPremiumStatus } =
+  authSlice.actions;
 
 export default authSlice.reducer;
 
