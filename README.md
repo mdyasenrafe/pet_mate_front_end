@@ -24,7 +24,7 @@ PetMate is a platform dedicated to pet care enthusiasts, where users can share a
 
 ## Technology Stack
 
-- **Frontend**: React, Redux, TypeScript, Tailwind CSS, Ant Design
+- **Frontend**: Next.js, Redux, TypeScript, Tailwind CSS, Ant Design
 - **Backend**: Node.js, Express, MongoDB
 - **Authentication**: JWT (JSON Web Tokens)
 - **Payment Integration**: Stripe
