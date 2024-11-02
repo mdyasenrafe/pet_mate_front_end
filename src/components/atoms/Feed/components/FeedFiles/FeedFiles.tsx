@@ -25,7 +25,7 @@ export const FeedFiles: React.FC<FeedFilesProps> = ({ files }) => {
                 href={file.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center border border-gray-300 p-4 rounded-md"
+                className="flex items-center justify-center border border-gray-300 p-4 rounded-md mb-3"
               >
                 <span className="text-gray-700">View PDF</span>
               </a>
