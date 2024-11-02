@@ -125,18 +125,3 @@ input:focus {
   top: 8px !important;
   background: #001529 !important;
 }
-
-.blur-content::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(8px);
-  z-index: 10;
-  border-radius: inherit;
-}
-
-.blur-content .quill-content,
-.blur-content .feed-files {
-  filter: blur(8px);
-  pointer-events: none;
-}

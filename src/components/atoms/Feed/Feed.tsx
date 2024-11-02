@@ -13,7 +13,6 @@ import React, { useCallback, useMemo } from "react";
 import { Button, Text } from "..";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks";
-import { Modal } from "@/components";
 import { useAppSelector } from "@/redux";
 import { getCurrentUser } from "@/redux/features/auth";
 
@@ -83,9 +82,7 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
   return (
     <>
       <Card
-        className={`mb-6 rounded-md shadow-lg p-6 relative ${
-          premiumPost && !isPremiumUser ? "blur-content" : ""
-        }`}
+        className="mb-6 rounded-md shadow-lg p-6 relative"
         onClick={handleCardClick}
       >
         {premiumPost && (
@@ -94,57 +91,60 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
           </div>
         )}
 
-        {premiumPost && !isPremiumUser && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center p-4 rounded-md">
-            <Text variant="h4" className="text-white font-bold mb-2">
+        {premiumPost && !isPremiumUser ? (
+          <div className="flex flex-col items-center justify-center text-center p-4 rounded-md ">
+            <Text variant="h4" className="text-black font-bold mb-2">
               Premium Content
             </Text>
-            <Text variant="p5" className="text-white mb-4">
+            <Text variant="p5" className="text-gray-700 mb-4">
               Only premium users can view this post.
             </Text>
             <Button
               className="bg-yellow-500 text-white font-bold"
               onClick={(e) => {
-                e.stopPropagation(); // Prevents card click navigation
+                e.stopPropagation();
                 handleUpgradeRedirect();
               }}
             >
               Upgrade Now
             </Button>
           </div>
-        )}
+        ) : (
+          // Render the main content if the user is premium or the post is not premium
+          <>
+            <div className="flex justify-between items-start mb-3">
+              <FeedAuthorInfo post={post} />
+              {isAuthor && (
+                <Dropdown
+                  menu={{ items, onClick: handleDropdownClick }}
+                  trigger={["click"]}
+                >
+                  <Button
+                    shape="circle"
+                    icon={<FaEllipsisV />}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </Dropdown>
+              )}
+            </div>
 
-        <div className="flex justify-between items-start mb-3">
-          <FeedAuthorInfo post={post} />
-          {isAuthor && (
-            <Dropdown
-              menu={{ items, onClick: handleDropdownClick }}
-              trigger={["click"]}
-            >
-              <Button
-                shape="circle"
-                icon={<FaEllipsisV />}
-                onClick={(e) => e.stopPropagation()}
+            <div>
+              <Text variant="h4" className="font-bold mb-1 !text-black">
+                {post.title}
+              </Text>
+            </div>
+
+            <div className="mt-4">
+              <div
+                className="quill-content"
+                dangerouslySetInnerHTML={getTailwindContentStyles}
               />
-            </Dropdown>
-          )}
-        </div>
+            </div>
 
-        <div>
-          <Text variant="h4" className="font-bold mb-1 !text-black">
-            {post.title}
-          </Text>
-        </div>
-
-        <div className="mt-4">
-          <div
-            className="quill-content"
-            dangerouslySetInnerHTML={getTailwindContentStyles}
-          />
-        </div>
-
-        <FeedFiles files={post.files} />
-        {!isAdmin && <FeedBottom post={post} />}
+            <FeedFiles files={post.files} />
+            {!isAdmin && <FeedBottom post={post} />}
+          </>
+        )}
       </Card>
 
       {isModalOpen && (

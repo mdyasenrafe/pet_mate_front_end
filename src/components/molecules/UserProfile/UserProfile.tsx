@@ -81,14 +81,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
     }
   };
 
-  const handleChangePasswordSubmit = (data: {
-    oldPassword: string;
-    newPassword: string;
-  }) => {
-    console.log("Password change data", data);
-    closeChangePassword();
-  };
-
   return (
     <section className="mx-0 lg:mx-6 mt-10">
       <div className="lg:flex justify-between items-center pb-4">
@@ -160,7 +152,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
       <ChangePasswordModal
         isModalOpen={isChangePasswordOpen}
         closeModal={closeChangePassword}
-        onSubmit={handleChangePasswordSubmit}
       />
 
       <div className="mt-6 p-4 bg-white shadow rounded-lg">
