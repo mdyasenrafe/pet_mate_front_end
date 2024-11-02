@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
   const user = verifyToken(token as string) as JwtPayload & {
     role?: string;
   };
-  if (user && user?.role === "ADMIN") {
+  if (user && user?.role === "admin") {
     return NextResponse.next();
   } else {
     return NextResponse.redirect(new URL("/", request.url));
