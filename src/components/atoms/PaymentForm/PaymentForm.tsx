@@ -48,17 +48,30 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
           },
           redirect: "if_required",
         });
+
         console.log(paymentIntentId);
+
         if (error) {
           toast.error("We couldn’t process your payment. Give it another try!");
           if (paymentIntentId) {
             await paymentFailure({ paymentIntentId: paymentIntentId });
+
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 3000);
           }
         } else if (paymentIntentId) {
-          toast.success("You're all set! Enjoy your premium PetMate perks.");
           await paymentSuccess({ paymentIntentId: paymentIntentId });
+          toast.success("You're all set! Enjoy your premium PetMate perks.");
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 3000);
         } else {
           toast.success("You're set! Enjoy your premium PetMate perks.");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 3000);
         }
       } catch (err) {
         console.error("Payment Error:", err);
