@@ -31,29 +31,44 @@ export const RightSideBar = () => {
   return (
     <div className="ml-3 bg-secondary p-3 mt-4 rounded-md !sticky top-4">
       {currentUser?._id ? (
-        <>
-          <Text
-            className="text-white font-bold mb-2 text-lg lg:text-sm 2xl:text-lg"
-            variant="p3"
-          >
-            Unlock Premium Features
-          </Text>
-          <Text variant="p5" color="white">
-            Access exclusive tips, personalized pet care, and more by upgrading
-            to premium.
-          </Text>
-          <Button
-            className="mt-3 w-full !h-[40px] !border !border-white bg-primary-hover"
-            customColor="secondary"
-            icon={<FaArrowRightLong />}
-            iconPosition="end"
-            onClick={handlePremiumRedirect}
-          >
-            <Text className="text-white" variant="p4">
-              Upgrade Now
+        currentUser.isPremium ? (
+          <>
+            <Text
+              className="text-white font-bold mb-2 text-lg lg:text-sm 2xl:text-lg"
+              variant="p3"
+            >
+              🎉 You’re a Premium Member! 🎉
             </Text>
-          </Button>
-        </>
+            <Text variant="p5" color="white">
+              Enjoy exclusive pet care tips, personalized advice, and access to
+              all premium features. Thank you for being a valued member!
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text
+              className="text-white font-bold mb-2 text-lg lg:text-sm 2xl:text-lg"
+              variant="p3"
+            >
+              Unlock Premium Features
+            </Text>
+            <Text variant="p5" color="white">
+              Access exclusive tips, personalized pet care, and more by
+              upgrading to premium.
+            </Text>
+            <Button
+              className="mt-3 w-full !h-[40px] !border !border-white bg-primary-hover"
+              customColor="secondary"
+              icon={<FaArrowRightLong />}
+              iconPosition="end"
+              onClick={handlePremiumRedirect}
+            >
+              <Text className="text-white" variant="p4">
+                Upgrade Now
+              </Text>
+            </Button>
+          </>
+        )
       ) : (
         <>
           <Text
