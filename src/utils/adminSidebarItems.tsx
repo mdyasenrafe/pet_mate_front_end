@@ -1,5 +1,10 @@
 import { MdDashboard } from "react-icons/md";
-import { FaUserCircle, FaClipboardList, FaUsers } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaClipboardList,
+  FaUsers,
+  FaMoneyCheckAlt,
+} from "react-icons/fa";
 
 export const adminRoutes = [
   {
@@ -25,5 +30,11 @@ export const adminRoutes = [
     name: "User Management",
     path: "/dashboard/admin/user-management",
     icon: FaUsers,
+  },
+  {
+    id: 6.5,
+    name: "Payment History",
+    path: "/dashboard/admin/payment-history",
+    icon: FaMoneyCheckAlt,
   },
 ];
