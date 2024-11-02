@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Container, Text, Button, LoadingSpinner } from "@/components/atoms";
+import {
+  Container,
+  Text,
+  Button,
+  LoadingSpinner,
+  AuthPrompt,
+} from "@/components/atoms";
 import { FaArrowRightLong, FaRegCircleCheck } from "react-icons/fa6";
 import { colors } from "@/theme";
 import { Col, Row } from "antd";
@@ -55,6 +61,7 @@ const PremiumPage = () => {
   };
 
   if (!isMounted) return <LoadingSpinner />;
+  if (isMounted && !loggedInUser?._id) return <AuthPrompt />;
 
   return (
     <Container>
