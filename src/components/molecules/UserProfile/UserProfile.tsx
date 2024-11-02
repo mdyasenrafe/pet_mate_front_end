@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { AuthPrompt, Button, LoadingSpinner, Text } from "@/components/atoms";
 import { formatRelativeTime } from "@/utils";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiLock } from "react-icons/fi";
 import {
   DeletedPosts,
   FollowersList,
   FollowingList,
   MyPosts,
   EditProfileModal,
+  ChangePasswordModal,
 } from "./components";
 import { useMeQuery } from "@/redux/features/users";
 import { useAppSelector } from "@/redux";
@@ -22,6 +23,11 @@ type UserProfileProps = {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
+  const {
+    isModalOpen: isChangePasswordOpen,
+    openModal: openChangePassword,
+    closeModal: closeChangePassword,
+  } = useModal();
   const { data, isLoading, isFetching } = useMeQuery(userId);
   const currentUser = data?.data;
   const loggedInUser = useAppSelector(getCurrentUser);
@@ -75,6 +81,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
     }
   };
 
+  const handleChangePasswordSubmit = (data: {
+    oldPassword: string;
+    newPassword: string;
+  }) => {
+    console.log("Password change data", data);
+    closeChangePassword();
+  };
+
   return (
     <section className="mx-0 lg:mx-6 mt-10">
       <div className="lg:flex justify-between items-center pb-4">
@@ -98,15 +112,26 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
           </div>
         </div>
         {isOwner && (
-          <Button
-            icon={<FiEdit />}
-            iconPosition="start"
-            customColor="primary"
-            className="h-10 px-4 text-sm mt-4 lg:mt-0"
-            onClick={() => openModal()}
-          >
-            Edit Profile
-          </Button>
+          <div className="flex space-x-2 mt-4 lg:mt-0">
+            <Button
+              icon={<FiEdit />}
+              iconPosition="start"
+              customColor="primary"
+              className="h-10 px-4 text-sm"
+              onClick={() => openModal()}
+            >
+              Edit Profile
+            </Button>
+            <Button
+              icon={<FiLock />}
+              iconPosition="start"
+              customColor="secondary"
+              className="h-10 px-4 text-sm"
+              onClick={() => openChangePassword()}
+            >
+              Change Password
+            </Button>
+          </div>
         )}
       </div>
       <hr />
@@ -130,6 +155,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         loggedInUser={currentUser as TUser}
+      />
+
+      <ChangePasswordModal
+        isModalOpen={isChangePasswordOpen}
+        closeModal={closeChangePassword}
+        onSubmit={handleChangePasswordSubmit}
       />
 
       <div className="mt-6 p-4 bg-white shadow rounded-lg">
