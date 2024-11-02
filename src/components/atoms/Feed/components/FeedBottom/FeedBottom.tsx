@@ -15,7 +15,7 @@ import {
   useUndoVotePostMutation,
   TPost,
 } from "@/redux/features/post";
-
+import { toast } from "sonner";
 type FeedBottomProps = {
   post: TPost;
 };
@@ -41,7 +41,12 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
   const [undoVotePost] = useUndoVotePostMutation();
 
   const handleUpvote = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation to details page
+    e.stopPropagation();
+    if (!currentUser) {
+      toast.warning("Please log in to vote on posts!");
+      return;
+    }
+
     if (hasUpvoted) {
       setLocalUpvoteCount(localUpvoteCount - 1);
       setHasUpvoted(false);
@@ -67,7 +72,12 @@ export const FeedBottom: React.FC<FeedBottomProps> = ({ post }) => {
   };
 
   const handleDownvote = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation to details page
+    e.stopPropagation();
+    if (!currentUser) {
+      toast.warning("Please log in to vote on posts!");
+      return;
+    }
+
     if (hasDownvoted) {
       setLocalDownvoteCount(localDownvoteCount - 1);
       setHasDownvoted(false);
