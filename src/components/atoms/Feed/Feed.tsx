@@ -110,7 +110,6 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
             </Button>
           </div>
         ) : (
-          // Render the main content if the user is premium or the post is not premium
           <>
             <div className="flex justify-between items-start mb-3">
               <FeedAuthorInfo post={post} />

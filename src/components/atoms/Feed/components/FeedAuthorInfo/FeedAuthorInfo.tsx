@@ -10,7 +10,8 @@ type FeedAuthorInfoProps = {
 export const FeedAuthorInfo: React.FC<FeedAuthorInfoProps> = ({ post }) => {
   const router = useRouter();
 
-  const handleAuthorClick = () => {
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push(`/profile/${post.author._id}`);
   };
 

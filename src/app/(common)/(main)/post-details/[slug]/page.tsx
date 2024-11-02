@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, Feed, Text } from "@/components/atoms";
+import { AuthPrompt, Button, Container, Feed, Text } from "@/components/atoms";
 import { LoadingSpinner } from "@/components/atoms/LoadingSpinner";
 import { FormTextArea, FormWrapper } from "@/components/form";
 import { useAppSelector } from "@/redux";
@@ -28,14 +28,23 @@ type CommentFormData = {
 const PostPage: React.FC<Props> = ({ params }) => {
   const { slug } = params;
   const currentUser = useAppSelector(getCurrentUser);
-  const { data, error, isLoading } = useGetPostDetailsQuery(slug);
+
+  const { data, error, isLoading } = useGetPostDetailsQuery(slug, {
+    skip: !currentUser?._id,
+  });
+
   const [addComment] = useAddCommentMutation();
 
   const handleSubmit: SubmitHandler<CommentFormData> = async (formData) => {
+    if (!currentUser?._id) {
+      toast.error("Please log in to add a comment.");
+      return;
+    }
+
     try {
       const commentPayload = {
         post: slug,
-        author: currentUser?._id as string,
+        author: currentUser._id,
         content: formData.content,
       };
       const result = await addComment(commentPayload).unwrap();
@@ -52,6 +61,10 @@ const PostPage: React.FC<Props> = ({ params }) => {
 
   if (error) {
     return <Text variant="body">Failed to load post details.</Text>;
+  }
+
+  if (!currentUser?._id) {
+    return <AuthPrompt />;
   }
 
   return (
