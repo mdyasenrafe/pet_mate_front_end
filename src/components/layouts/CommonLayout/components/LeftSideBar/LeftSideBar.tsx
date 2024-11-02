@@ -18,6 +18,7 @@ import { LuPlusCircle } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { LogoutModal } from "./components";
 import { verifyToken } from "@/utils/verifyToken";
+import Cookies from "js-cookie";
 
 export const LeftSideBar = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -50,6 +51,7 @@ export const LeftSideBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    Cookies.remove("token");
     closeModal();
   };
 
