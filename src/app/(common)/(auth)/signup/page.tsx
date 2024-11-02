@@ -19,6 +19,7 @@ import { FormUpload } from "@/components/form";
 import { useFileUploadMutation } from "@/api/updloadApi";
 import { signupSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 
 const Signup = () => {
   const searchParams = useSearchParams();
@@ -39,13 +40,21 @@ const Signup = () => {
           data.profilePicture = thumbRes.data.url;
         } else {
           toast.error("Something went wrong! Please try again");
+          return;
         }
-
-        const res = await signup(data).unwrap();
-        dispatch(addUser({ user: res.data, token: res.token as string }));
-        toast.success(res?.message);
-        router.push(redirect);
       }
+
+      const res = await signup(data).unwrap();
+
+      Cookies.set("token", res.token as string, {
+        path: "/",
+        secure: true,
+        sameSite: "Strict",
+      });
+
+      dispatch(addUser({ user: res.data, token: res.token as string }));
+      toast.success(res?.message);
+      router.push(redirect);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to sign up. Please try again.");
     }

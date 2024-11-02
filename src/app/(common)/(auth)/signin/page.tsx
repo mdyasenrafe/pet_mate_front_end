@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/redux";
 import { toast } from "sonner";
 import { signinSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 
 const SignIn = () => {
   const searchParams = useSearchParams();
@@ -24,6 +25,13 @@ const SignIn = () => {
   const onSubmit: SubmitHandler<TSigninValue> = async (data) => {
     try {
       const res = await login(data).unwrap();
+
+      Cookies.set("token", res.token as string, {
+        path: "/",
+        secure: true,
+        sameSite: "Strict",
+      });
+
       dispatch(addUser({ user: res.data, token: res.token as string }));
       toast.success(res?.message);
       router.push(redirect as string);
