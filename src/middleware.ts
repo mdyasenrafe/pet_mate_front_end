@@ -10,14 +10,15 @@ const roleBasedRoutes = {
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
 
-  const user = verifyToken(token as string) as JwtPayload & {
-    role?: string;
-  };
-  if (user && user?.role === "admin") {
-    return NextResponse.next();
-  } else {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (token) {
+    const user = verifyToken(token as string) as JwtPayload & {
+      role?: string;
+    };
+    if (user && user?.role === "admin") {
+      return NextResponse.next();
+    }
   }
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
