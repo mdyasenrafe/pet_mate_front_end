@@ -29,8 +29,12 @@ const premiumPlans = [
 
 const PremiumPage = () => {
   const loggedInUser = useAppSelector(getCurrentUser);
+
+  // api  hooks
   const [pay, { isLoading, isSuccess }] = usePayMutation();
   const { isModalOpen, openModal, closeModal } = useModal();
+
+  // state
   const [clientSecret, setClientSecret] = useState<string>("");
   const [paymentIntentId, setPaymentIntentId] = useState<string>("");
   const [isMounted, setIsMounted] = useState(false);

@@ -14,6 +14,8 @@ import { Button, Text } from "..";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks";
 import { Modal } from "@/components";
+import { useAppSelector } from "@/redux";
+import { getCurrentUser } from "@/redux/features/auth";
 
 type FeedProps = {
   post: TPost;
@@ -24,6 +26,9 @@ type FeedProps = {
 export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const premiumPost = post?.monetization;
+  const loggedInUser = useAppSelector(getCurrentUser);
+  const isPremiumUser = loggedInUser?.isPremium;
 
   const handleEdit = useCallback(() => {
     router.push(`/edit-post/${post._id}`);
@@ -32,6 +37,10 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
   const handleDelete = useCallback(() => {
     openModal();
   }, [openModal]);
+
+  const handleUpgradeRedirect = useCallback(() => {
+    router.push("/premium");
+  }, [router]);
 
   const handleDropdownClick: MenuProps["onClick"] = useCallback(
     (e: any) => {
@@ -66,15 +75,45 @@ export const Feed: React.FC<FeedProps> = ({ post, isAuthor, isAdmin }) => {
   );
 
   const handleCardClick = useCallback(() => {
-    router.push(`/post-details/${post._id}`);
-  }, [router, post._id]);
+    if (isPremiumUser || !premiumPost) {
+      router.push(`/post-details/${post._id}`);
+    }
+  }, [router, post._id, isPremiumUser, premiumPost]);
 
   return (
     <>
       <Card
-        className="mb-6 rounded-md shadow-lg p-6 !cursor-pointer"
+        className={`mb-6 rounded-md shadow-lg p-6 relative ${
+          premiumPost && !isPremiumUser ? "blur-content" : ""
+        }`}
         onClick={handleCardClick}
       >
+        {premiumPost && (
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow-md">
+            Premium Post
+          </div>
+        )}
+
+        {premiumPost && !isPremiumUser && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center p-4 rounded-md">
+            <Text variant="h4" className="text-white font-bold mb-2">
+              Premium Content
+            </Text>
+            <Text variant="p5" className="text-white mb-4">
+              Only premium users can view this post.
+            </Text>
+            <Button
+              className="bg-yellow-500 text-white font-bold"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevents card click navigation
+                handleUpgradeRedirect();
+              }}
+            >
+              Upgrade Now
+            </Button>
+          </div>
+        )}
+
         <div className="flex justify-between items-start mb-3">
           <FeedAuthorInfo post={post} />
           {isAuthor && (
